@@ -41,6 +41,11 @@ public class ResourceManager
             return null;
         }
 
+        // Addressable의 Instance 방식을 사용하지 않는 이유는
+        // refCount에 영향을 주기에 Clear 쪽에서도 같은 방식을 이용해야 함
+        // -> 제거를 할때 Addressable로 '사용되었는지'를 파악하는 여부가 까다롭기에
+        // 일반적인 Unity 방식으로 사용
+
         //if(pooling)
         //    return Managers.Pool.Pop(prefab);
 
@@ -124,6 +129,8 @@ public class ResourceManager
 
             foreach (var result in op.Result)
             {
+                // .sprite를 붙여 다른 타입으로 인식하지 않도록
+                // 캐스팅을 바꾸어줌 (Addressable의 버그를 예방)
                 if (result.PrimaryKey.Contains(".sprite"))
                 {
                     LoadAsync<Sprite>(result.PrimaryKey, (obj) =>
