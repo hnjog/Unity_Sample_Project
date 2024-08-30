@@ -46,8 +46,8 @@ public class ResourceManager
         // -> 제거를 할때 Addressable로 '사용되었는지'를 파악하는 여부가 까다롭기에
         // 일반적인 Unity 방식으로 사용
 
-        //if(pooling)
-        //    return Managers.Pool.Pop(prefab);
+        if (pooling)
+            return Managers.Pool.Pop(prefab);
 
         GameObject go = Object.Instantiate(prefab, parent);
         go.name = prefab.name;
@@ -59,8 +59,8 @@ public class ResourceManager
         if (go == null)
             return;
 
-        //if (Managers.Pool.Push(go))
-        //    return;
+        if (Managers.Pool.Push(go))
+            return;
 
         Object.Destroy(go);
     }
