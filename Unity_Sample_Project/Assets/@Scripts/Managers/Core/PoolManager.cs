@@ -27,17 +27,20 @@ public class Pool
     {
         _prefab = prefab;
         // Unity에서 지원하는 Pool 용 클래스
+        // 각각 객체 생성 시, 
         _pool = new ObjectPool<GameObject>(OnCreate, OnGet, OnRelease, OnDestroy);
     }
 
     public void Push(GameObject go)
     {
+        // 사용 끝난 오브젝트를 풀에 반환
         if (go.activeSelf)
             _pool.Release(go);
     }
 
     public GameObject Pop()
     {
+        // 풀에서 사용 가능한 오브젝트를 반환받는다 (없을시 새로 생성)
         return _pool.Get();
     }
 
