@@ -19,4 +19,11 @@ public static class Define
         Drag,
     }
 
+    public enum ESound
+    {
+        Bgm,
+        Effect,
+        Max,
+    }
+
 }

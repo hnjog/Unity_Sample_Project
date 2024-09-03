@@ -55,12 +55,13 @@ public class UI_TitleScene : UI_Scene
             // 정상적으로 로딩 완료
             if (count == totalCount)
             {
-                //Managers.Data.Init();
+                Managers.Data.Init();
 
                 // 시작 준비
                 GetObject((int)GameObjects.StartImage).gameObject.SetActive(true);
                 GetText((int)Texts.DisplayText).text = "Touch To Start";
             }
+
         });
     }
 }
