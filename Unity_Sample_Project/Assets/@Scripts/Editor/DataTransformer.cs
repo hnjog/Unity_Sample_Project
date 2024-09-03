@@ -106,6 +106,7 @@ public class DataTransformer : EditorWindow
             // TestData의 모든 필드 를 가져온다
             System.Reflection.FieldInfo[] fields = typeof(LoaderData).GetFields();
             // 필드를 순회하여 개체의 해당 필드를 가져온다
+            // 당연하지만 엑셀 데이터
             for (int f = 0; f < fields.Length; f++)
             {
                 FieldInfo field = loaderData.GetType().GetField(fields[f].Name);
