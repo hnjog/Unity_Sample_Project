@@ -11,6 +11,11 @@ public class GameScene : BaseScene
 
         SceneType = Define.EScene.GameScene;
 
+        // Map 로드
+        GameObject map = Managers.Resource.Instantiate("BaseMap");
+        map.transform.position = Vector3.zero;
+        map.name = "@BaseMap";
+
         return true;
     }
     public override void Clear()
