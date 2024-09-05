@@ -18,7 +18,7 @@ public class GameScene : BaseScene
 
         // 게임 신에서 직접 생성하면 관리가 어려워짐
         // 생성용 클래스
-        //Managers.Resource.Instantiate("Hero");
+        Hero hero = Managers.Object.Spawn<Hero>(Vector3.zero);
 
 
 
