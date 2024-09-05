@@ -19,8 +19,9 @@ public class GameScene : BaseScene
         // 게임 신에서 직접 생성하면 관리가 어려워짐
         // 생성용 클래스
         Hero hero = Managers.Object.Spawn<Hero>(Vector3.zero);
+        hero.CreatureState = Define.ECreatureState.Move;
 
-
+        Managers.UI.ShowBaseUI<UI_Joystick>();
 
         return true;
     }
