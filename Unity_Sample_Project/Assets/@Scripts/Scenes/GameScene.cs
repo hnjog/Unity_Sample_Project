@@ -16,6 +16,12 @@ public class GameScene : BaseScene
         map.transform.position = Vector3.zero;
         map.name = "@BaseMap";
 
+        // 게임 신에서 직접 생성하면 관리가 어려워짐
+        // 생성용 클래스
+        //Managers.Resource.Instantiate("Hero");
+
+
+
         return true;
     }
     public override void Clear()
