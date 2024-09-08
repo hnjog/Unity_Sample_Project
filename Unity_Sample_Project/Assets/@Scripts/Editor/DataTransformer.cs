@@ -86,6 +86,7 @@ public class DataTransformer : EditorWindow
         AssetDatabase.Refresh();
     }
 
+    // : new() - LoaderData 타입에 매개 변수 없는 생성자가 존재해야 함
     private static List<LoaderData> ParseExcelDataToList<LoaderData>(string filename) where LoaderData : new()
     {
         List<LoaderData> loaderDatas = new List<LoaderData>();
@@ -103,12 +104,13 @@ public class DataTransformer : EditorWindow
             // TestData 가 일단 위쪽에서 사용 중
             LoaderData loaderData = new LoaderData();
 
-            // TestData의 모든 필드 를 가져온다
+            // TestData의 모든 필드(변수 요소들)를 가져온다
             System.Reflection.FieldInfo[] fields = typeof(LoaderData).GetFields();
             // 필드를 순회하여 개체의 해당 필드를 가져온다
-            // 당연하지만 엑셀 데이터
             for (int f = 0; f < fields.Length; f++)
             {
+                // 해당 제네릭 타입의 타입 - 필드 정보를
+                // 미리 가져온 이름으로 가져온다
                 FieldInfo field = loaderData.GetType().GetField(fields[f].Name);
                 Type type = field.FieldType;
 
@@ -116,6 +118,8 @@ public class DataTransformer : EditorWindow
                 if (type.IsGenericType)
                 {
                     object value = ConvertList(row[f], type);
+                    // fieldInfo 이기에
+                    // 실제로 값을 써줄 대상(이 필드가 속한 인스턴스)에 값을 써준다
                     field.SetValue(loaderData, value);
                 }
                 else
