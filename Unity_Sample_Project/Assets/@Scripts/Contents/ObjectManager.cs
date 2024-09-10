@@ -27,7 +27,7 @@ public class ObjectManager
     public Transform MonsterRoot { get { return GetRootTransform("@Monsters"); } }
     #endregion
 
-    public T Spawn<T>(Vector3 position) where T : BaseObject
+    public T Spawn<T>(Vector3 position,int templateID) where T : BaseObject
     {
         // 규칙 선행 필수
         // - Prefab 이름을 Class 타입과 동일하게 작성
@@ -44,6 +44,13 @@ public class ObjectManager
         // 미리 상속시킨 타입 변수를 이용
         if (obj.ObjectType == EObjectType.Creature)
         {
+            // Data 체크
+            if(templateID != 0 && Managers.Data.CreatureDic.TryGetValue(templateID,out Data.CreatureData data)==false)
+            {
+                Debug.LogError($"");
+                return null;
+            }
+
             Creature creature = go.GetComponent<Creature>();
             switch (creature.CreatureType)
             {
@@ -60,6 +67,8 @@ public class ObjectManager
                     Monsters.Add(monster);
                     break;
             }
+
+            creature.SetInfo(templateID);
         }
         else if (obj.ObjectType == EObjectType.Projectile)
         {

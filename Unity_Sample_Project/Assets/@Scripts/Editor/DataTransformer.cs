@@ -17,7 +17,9 @@ public class DataTransformer : EditorWindow
     [MenuItem("Tools/ParseExcel %#K")]
     public static void ParseExcelDataToJson()
     {
-        
+        // 툴 작동시
+        // Ctrl + Shift + k
+        ParseExcelDataToJson<CreatureDataLoader, CreatureData>("Creature");
 
         Debug.Log("DataTransformer Completed");
     }

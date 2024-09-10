@@ -1,12 +1,32 @@
+using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static Define;
 
 public class Creature : BaseObject
 {
-    public float Speed { get; protected set; } = 1.0f;
+    public Data.CreatureData CreatureData { get; protected set; }
+
     public ECreatureType CreatureType { get; protected set; } = ECreatureType.None;
+
+    #region Stats
+    public float Hp { get; set; }
+    public float MaxHp { get; set; }
+    public float MaxHpBonusRate { get; set; }
+    public float HealBonusRate { get; set; }
+    public float HpRegen { get; set; }
+    public float Atk { get; set; }
+    public float AttackRate { get; set; }
+    public float Def { get; set; }
+    public float DefRate { get; set; }
+    public float CriRate { get; set; }
+    public float CriDamage { get; set; }
+    public float DamageReduction { get; set; }
+    public float MoveSpeedRate { get; set; }
+    public float MoveSpeed { get; set; }
+    #endregion
 
     protected ECreatureState _creatureState = ECreatureState.None;
     // 하위 크리쳐에서
@@ -31,8 +51,56 @@ public class Creature : BaseObject
             return false;
 
         ObjectType = EObjectType.Creature;
-        CreatureState = ECreatureState.Idle;
+        // 상태 변경 시, Spine 애니메이션이 변경되나
+        // 현재 시점에선 SetInfo가 호출되지 않으므로 크래시가 난다
+        // 따라서 SetInfo로 상태 변경을 옮김
         return true;
+    }
+
+    public virtual void SetInfo(int templateID)
+    {
+        DataTemplateID = templateID;
+        CreatureData = Managers.Data.CreatureDic[templateID];
+        gameObject.name = $"{CreatureData.DataId}_{CreatureData.DescriptionTextID}";
+
+        //Collider
+        Collider.offset = new Vector2 (CreatureData.ColliderOffsetX, CreatureData.ColliderOffsetY);
+        Collider.radius = CreatureData.ColliderRadius;
+
+        // RigidBody
+        RigidBody.mass = CreatureData.Mass;
+
+        // Spine
+        // 스켈레톤에 따라 프리팹을 별도로 만드는 방식도 존재
+        // 여기서는 프리팹 수를 줄이기 위해 바꿔끼는 식
+        SkeletonAnim.skeletonDataAsset = Managers.Resource.Load<SkeletonDataAsset>(CreatureData.SkeletonDataID);
+        SkeletonAnim.Initialize(true);
+
+        // Register AnimEvent
+        //if (SkeletonAnim.AnimationState != null)
+        //{
+        //    SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
+        //    SkeletonAnim.AnimationState.Event += OnAnimEventHandler;
+        //}
+
+        // Spine SkeletonAnimation은 SpriteRenderer 를 사용하지 않고 MeshRenderer을 사용함.
+        // 그렇기떄문에 2D Sort Axis가 안먹히게 되는데 SortingGroup을 SpriteRenderer, MeshRenderer을 같이 계산하여
+        // 그릴 순서를 정해준다
+        SortingGroup sg = Util.GetOrAddComponent<SortingGroup>(gameObject);
+        sg.sortingOrder = SortingLayers.CREATURE;
+
+        // Skills
+        // CreatureData.SkillIdList;
+
+        // Stat
+        MaxHp = CreatureData.MaxHp;
+        Hp = CreatureData.MaxHp;
+        Atk = CreatureData.MaxHp;
+        MaxHp = CreatureData.MaxHp;
+        MoveSpeed = CreatureData.MoveSpeed;
+
+        // State
+        CreatureState = ECreatureState.Idle;
     }
 
     protected override void UpdateAnimation()
