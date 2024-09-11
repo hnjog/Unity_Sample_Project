@@ -58,6 +58,13 @@ public static class Define
         Dead
     }
 
+    public enum EEnvState
+    {
+        Idle,
+        OnDamaged,
+        Dead
+    }
+
     public const int CAMERA_PROJECTION_SIZE = 12;
 
     // 외부 Data 시트에서 정의한 ID (임시)

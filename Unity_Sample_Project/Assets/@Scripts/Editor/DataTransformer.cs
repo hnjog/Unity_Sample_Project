@@ -20,6 +20,7 @@ public class DataTransformer : EditorWindow
         // 툴 작동시
         // Ctrl + Shift + k
         ParseExcelDataToJson<CreatureDataLoader, CreatureData>("Creature");
+        ParseExcelDataToJson<EnvDataLoader, EnvData>("Env");
 
         Debug.Log("DataTransformer Completed");
     }

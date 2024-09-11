@@ -42,12 +42,18 @@ public class Monster : Creature
             return false;
 
         CreatureType = ECreatureType.Monster;
-        CreatureState = ECreatureState.Idle;
 
         // AI 작동하도록 코루틴 실행
         StartCoroutine(CoUpdateAI());
 
         return true;
+    }
+
+    public override void SetInfo(int templateID)
+    {
+        base.SetInfo(templateID);
+
+        CreatureState = ECreatureState.Idle;
     }
 
     void Start()

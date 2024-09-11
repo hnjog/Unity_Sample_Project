@@ -11,6 +11,7 @@ public class ObjectManager
     // Container (List 방식도 존재)
     public HashSet<Hero> Heroes { get; } = new HashSet<Hero>();
     public HashSet<Monster> Monsters { get; } = new HashSet<Monster>();
+    public HashSet<Env> Envs { get; } = new HashSet<Env>();
 
     #region Roots
     // Root 부모를 만들어 게임 Scene 등에서 관측하기 편하도록
@@ -25,6 +26,7 @@ public class ObjectManager
 
     public Transform HeroRoot { get { return GetRootTransform("@Heroes"); } }
     public Transform MonsterRoot { get { return GetRootTransform("@Monsters"); } }
+    public Transform EnvRoot { get { return GetRootTransform("@Envs"); } }
     #endregion
 
     public T Spawn<T>(Vector3 position,int templateID) where T : BaseObject
@@ -47,7 +49,7 @@ public class ObjectManager
             // Data 체크
             if(templateID != 0 && Managers.Data.CreatureDic.TryGetValue(templateID,out Data.CreatureData data)==false)
             {
-                Debug.LogError($"");
+                Debug.LogError($"ObjectManager Spawn Creature Failed! TryGetValue TemplateID : {templateID}");
                 return null;
             }
 
@@ -76,7 +78,18 @@ public class ObjectManager
         }
         else if (obj.ObjectType == EObjectType.Env)
         {
+            if (templateID != 0 && Managers.Data.EnvDic.TryGetValue(templateID, out Data.EnvData data) == false)
+            {
+                Debug.LogError($"ObjectManager Spawn Env Failed! TryGetValue TemplateID : {templateID}");
+                return null;
+            }
 
+            obj.transform.parent = EnvRoot;
+
+            Env env = go.GetComponent<Env>();
+            Envs.Add(env);
+
+            env.SetInfo(templateID);
         }
 
         return obj as T;
@@ -107,7 +120,8 @@ public class ObjectManager
         }
         else if (obj.ObjectType == EObjectType.Env)
         {
-
+            Env env = obj as Env;
+            Envs.Remove(env);
         }
 
         Managers.Resource.Destroy(obj.gameObject);
