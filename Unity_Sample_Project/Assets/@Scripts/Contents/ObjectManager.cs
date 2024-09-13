@@ -12,6 +12,7 @@ public class ObjectManager
     public HashSet<Hero> Heroes { get; } = new HashSet<Hero>();
     public HashSet<Monster> Monsters { get; } = new HashSet<Monster>();
     public HashSet<Env> Envs { get; } = new HashSet<Env>();
+    public HeroCamp Camp { get; private set; }
 
     #region Roots
     // Root 부모를 만들어 게임 Scene 등에서 관측하기 편하도록
@@ -91,6 +92,10 @@ public class ObjectManager
 
             env.SetInfo(templateID);
         }
+        else if (obj.ObjectType == EObjectType.HeroCamp)
+        {
+            Camp = go.GetComponent<HeroCamp>();
+        }
 
         return obj as T;
     }
@@ -122,6 +127,10 @@ public class ObjectManager
         {
             Env env = obj as Env;
             Envs.Remove(env);
+        }
+        else if (obj.ObjectType == EObjectType.HeroCamp)
+        {
+            Camp = null;
         }
 
         Managers.Resource.Destroy(obj.gameObject);
