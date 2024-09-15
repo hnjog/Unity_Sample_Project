@@ -44,14 +44,6 @@ public static class Extension
             Managers.Resource.Destroy(child.gameObject);
     }
 
-    public static void TranslateEx(this Transform transform, Vector3 dir)
-    {
-        // GetComponent를 통해 Hero 같은 자식 객체 컴포넌트라도 가져올 수 있음
-        BaseObject bo = transform.gameObject.GetComponent<BaseObject>();
-        if (bo != null)
-            bo.TranslateEx(dir);
-    }
-
     public static void Shuffle<T>(this IList<T> list)
     {
         int n = list.Count;

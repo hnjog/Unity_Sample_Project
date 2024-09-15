@@ -91,6 +91,13 @@ public static class Define
         Projectile = 10,
     }
 
+    public enum EColliderSize
+    {
+        Small,
+        Normal,
+        Big
+    }
+
     public const int CAMERA_PROJECTION_SIZE = 12;
 
     // 외부 Data 시트에서 정의한 ID (임시)

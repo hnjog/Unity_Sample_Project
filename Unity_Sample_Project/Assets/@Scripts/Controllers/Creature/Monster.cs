@@ -72,8 +72,6 @@ public class Monster : Creature
 
     protected override void UpdateIdle()
     {
-        Debug.Log("Idle");
-
         // Patrol
         {
             // 10%의 확률로 정찰하도록
@@ -103,8 +101,6 @@ public class Monster : Creature
                 // 거리의 제곱 : 루트를 씌우지 않아도 거리 비교는 가능하므로
                 float distToTargetSqr = dir.sqrMagnitude;
 
-                Debug.Log(distToTargetSqr);
-
                 if (distToTargetSqr > searchDistanceSqr)
                     continue;
 
@@ -125,20 +121,17 @@ public class Monster : Creature
 
     protected override void UpdateMove()
     {
-        Debug.Log("Move");
-
         // 적 발견의 상태인가
         if (_target == null)
         {
             // Patrol or Return
             Vector3 dir = (_destPos - transform.position);
-            float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * MoveSpeed);
-            transform.TranslateEx(dir.normalized * moveDist);
-
             if (dir.sqrMagnitude <= 0.01f)
             {
                 CreatureState = ECreatureState.Idle;
             }
+
+            SetRigidBodyVelocity(dir.normalized * MoveSpeed);
         }
         else
         {
@@ -159,8 +152,7 @@ public class Monster : Creature
             else
             {
                 // 공격 범위 밖이라면 추적.
-                float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * MoveSpeed);
-                transform.TranslateEx(dir.normalized * moveDist);
+                SetRigidBodyVelocity(dir.normalized * MoveSpeed);
 
                 // 너무 멀어지면 포기.
                 float searchDistanceSqr = SearchDistance * SearchDistance;
@@ -176,8 +168,6 @@ public class Monster : Creature
 
     protected override void UpdateSkill()
     {
-        Debug.Log("Skill");
-
         // 대기 끝나지 않았음
         if (_coWait != null)
             return;
@@ -188,7 +178,6 @@ public class Monster : Creature
 
     protected override void UpdateDead()
     {
-        Debug.Log("Dead");
 
     }
     #endregion

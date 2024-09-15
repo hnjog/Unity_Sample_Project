@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using static Define;
+using Spine;
 
 public class Hero : Creature
 {
@@ -14,10 +15,10 @@ public class Hero : Creature
         {
             _needArrange = value;
 
-            //if (value)
-            //    ChangeColliderSize(EColliderSize.Big);
-            //else
-            //    TryResizeCollider();
+            if (value)
+                ChangeColliderSize(EColliderSize.Big);
+            else
+                TryResizeCollider();
         }
     }
 
@@ -30,10 +31,10 @@ public class Hero : Creature
             {
                 base.CreatureState = value;
 
-                //if (value == ECreatureState.Move)
-                //    RigidBody.mass = CreatureData.Mass;
-                //else
-                //    RigidBody.mass = CreatureData.Mass * 0.1f;
+                if (value == ECreatureState.Move)
+                    RigidBody.mass = CreatureData.Mass;
+                else
+                    RigidBody.mass = CreatureData.Mass * 0.1f;
             }
         }
     }
@@ -49,13 +50,13 @@ public class Hero : Creature
             switch (value)
             {
                 case EHeroMoveState.CollectEnv:
-                    //NeedArrange = true;
+                    NeedArrange = true;
                     break;
                 case EHeroMoveState.TargetMonster:
-                    //NeedArrange = true;
+                    NeedArrange = true;
                     break;
                 case EHeroMoveState.ForceMove:
-                    //NeedArrange = true;
+                    NeedArrange = true;
                     break;
             }
         }
@@ -199,6 +200,7 @@ public class Hero : Creature
             return;
         }
 
+        // 4. 캠프 주변으로 소집
         if (HeroMoveState == EHeroMoveState.ReturnToCamp)
         {
             Vector3 dir = HeroCampDest.position - transform.position;
@@ -225,7 +227,17 @@ public class Hero : Creature
     }
     protected override void UpdateSkill()
     {
+        if(HeroMoveState == EHeroMoveState.ForceMove)
+        {
+            CreatureState = ECreatureState.Move;
+            return;
+        }
 
+        if (_target.IsValid() == false)
+        {
+            CreatureState = ECreatureState.Move;
+            return;
+        }
     }
     protected override void UpdateDead()
     {
@@ -293,6 +305,26 @@ public class Hero : Creature
     }
     #endregion
 
+    private void TryResizeCollider()
+    {
+        // 일단 충돌체 아주 작게.
+        ChangeColliderSize(EColliderSize.Small);
+
+        foreach (var hero in Managers.Object.Heroes)
+        {
+            if (hero.HeroMoveState == EHeroMoveState.ReturnToCamp)
+                return;
+        }
+
+        // ReturnToCamp가 한 명도 없으면 콜라이더 조정.
+        foreach (var hero in Managers.Object.Heroes)
+        {
+            // 단 채집이나 전투중이면 스킵.
+            if (hero.CreatureState == ECreatureState.Idle)
+                hero.ChangeColliderSize(EColliderSize.Big);
+        }
+    }
+
     private void HandleOnJoystickStateChanged(EJoystickState joystickState)
     {
         switch (joystickState)
@@ -309,5 +341,17 @@ public class Hero : Creature
             default:
                 break;
         }
+    }
+
+    public override void OnAnimEventHandler(TrackEntry trackEntry, Spine.Event e)
+    {
+        base.OnAnimEventHandler(trackEntry, e);
+
+        CreatureState = ECreatureState.Move;
+
+        if (_target.IsValid() == false)
+            return;
+
+        //_target.OnDamaged(this);
     }
 }
