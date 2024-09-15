@@ -352,6 +352,7 @@ public class Hero : Creature
         if (_target.IsValid() == false)
             return;
 
-        //_target.OnDamaged(this);
+        // 피해를 받는 입장에서 처리
+        _target.OnDamaged(this);
     }
 }
