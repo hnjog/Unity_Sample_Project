@@ -10,12 +10,14 @@ public interface ILoader<key,value> // Generic
 public class DataManager
 {
     // 필드 겸 프로퍼티 (변수와 속성) 역할을 겸함
-    public Dictionary<int, Data.CreatureData> CreatureDic { get; private set; }
+    public Dictionary<int, Data.HeroData> HeroDic { get; private set; } = new Dictionary<int, Data.HeroData>();
+    public Dictionary<int, Data.MonsterData> MonsterDic { get; private set; } = new Dictionary<int, Data.MonsterData>();
     public Dictionary<int, Data.EnvData> EnvDic { get; private set; }
 
     public void Init()
     {
-        CreatureDic = LoadJson<Data.CreatureDataLoader, int, Data.CreatureData>("CreatureData").MakeDict();
+        HeroDic = LoadJson<Data.HeroDataLoader, int, Data.HeroData>("HeroData").MakeDict();
+        MonsterDic = LoadJson<Data.MonsterDataLoader, int, Data.MonsterData>("MonsterData").MakeDict();
         EnvDic = LoadJson<Data.EnvDataLoader, int, Data.EnvData>("EnvData").MakeDict();
     }
 

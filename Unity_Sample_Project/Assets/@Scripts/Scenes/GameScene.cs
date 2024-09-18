@@ -24,8 +24,8 @@ public class GameScene : BaseScene
         {
             // 게임 신에서 직접 생성하면 관리가 어려워짐
             // 생성용 클래스
-            Hero temp = Managers.Object.Spawn<Hero>(new Vector3(-10 + Random.Range(-5,5), -5 + Random.Range(-5, 5), 0), HERO_KNIGHT_ID);
-            temp.CreatureState = Define.ECreatureState.Move;
+            int heroTemplateID = HERO_WIZARD_ID + Random.Range(0,5);
+            Hero temp = Managers.Object.Spawn<Hero>(new Vector3(-10 + Random.Range(-5,5), -5 + Random.Range(-5, 5), 0), heroTemplateID);
         }
 
         CameraController cameraController = Camera.main.GetOrAddComponent<CameraController>();

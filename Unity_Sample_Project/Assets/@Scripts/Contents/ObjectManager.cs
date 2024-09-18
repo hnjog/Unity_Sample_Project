@@ -47,13 +47,6 @@ public class ObjectManager
         // 미리 상속시킨 타입 변수를 이용
         if (obj.ObjectType == EObjectType.Creature)
         {
-            // Data 체크
-            if(templateID != 0 && Managers.Data.CreatureDic.TryGetValue(templateID,out Data.CreatureData data)==false)
-            {
-                Debug.LogError($"ObjectManager Spawn Creature Failed! TryGetValue TemplateID : {templateID}");
-                return null;
-            }
-
             Creature creature = go.GetComponent<Creature>();
             switch (creature.CreatureType)
             {
