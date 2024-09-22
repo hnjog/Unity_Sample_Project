@@ -10,6 +10,7 @@ using static UnityEngine.GraphicsBuffer;
 public class Creature : BaseObject
 {
     public BaseObject Target {  get; protected set; }
+    public SkillComponent Skills { get; protected set; }
 
     public Data.CreatureData CreatureData { get; protected set; }
 

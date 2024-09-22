@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Managers : MonoBehaviour
 {
+    // 절대적으로 한번만 초기화 하기 위함 (일부 강제 종료 등의 상황에서 재 생성 되는 것을 막기 위함)
+    public static bool Initialized { get; set; } = false;
+
     // 하위 매니저를 관리
     // 다른 신으로 가도 사라지지 않도록 설정하며, 자기 자신을 생성
     private static Managers s_instance;
@@ -36,8 +39,10 @@ public class Managers : MonoBehaviour
 
     public static void Init()
     {
-        if(s_instance == null)
+        if(s_instance == null && Initialized == false)
         {
+            Initialized = true;
+
             GameObject gameObject = GameObject.Find("@Managers");
             if(gameObject == null )
             {
