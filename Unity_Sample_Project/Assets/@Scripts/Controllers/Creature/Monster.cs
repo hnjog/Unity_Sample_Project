@@ -54,6 +54,10 @@ public class Monster : Creature
         base.SetInfo(templateID);
 
         CreatureState = ECreatureState.Idle;
+
+        // Skill
+        Skills = gameObject.GetOrAddComponent<SkillComponent>();
+        Skills.SetInfo(this, CreatureData.SkillIdList);
     }
 
     void Start()
@@ -105,6 +109,7 @@ public class Monster : Creature
             if (dir.sqrMagnitude <= 0.01f)
             {
                 CreatureState = ECreatureState.Idle;
+                return;
             }
 
             SetRigidBodyVelocity(dir.normalized * MoveSpeed);
@@ -113,7 +118,6 @@ public class Monster : Creature
         {
             // Chase
             SkillBase skill = Skills.GetReadySkill();
-            //ChaseOrAttackTarget(MONSTER_SEARCH_DISTANCE, 5.0f);
             ChaseOrAttackTarget(MONSTER_SEARCH_DISTANCE, skill);
 
             // 너무 멀어지면 포기.
