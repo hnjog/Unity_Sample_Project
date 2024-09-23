@@ -91,7 +91,7 @@ public class Monster : Creature
         // 'func:' : 함수 매개변수 전달 문법 (명명된 인수)
         // func<t> : 제네릭 대리자 (함수 포인터와 유사)
         Creature creature = FindClosestInRange(MONSTER_SEARCH_DISTANCE, Managers.Object.Heroes, func: IsValid) as Creature;
-        if (creature == null)
+        if (creature != null)
         {
             Target = creature;
             CreatureState = ECreatureState.Move;
