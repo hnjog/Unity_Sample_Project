@@ -48,7 +48,7 @@ public class NormalAttack : SkillBase
         else
         {
             // Ranged
-            //GenerateProjectile(Owner, Owner.CenterPosition);
+            GenerateProjectile(Owner, Owner.CenterPosition);
         }
     }
     protected override void OnAnimCompleteHandler(TrackEntry trackEntry)
