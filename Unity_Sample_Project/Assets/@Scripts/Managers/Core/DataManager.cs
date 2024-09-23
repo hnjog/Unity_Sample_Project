@@ -6,6 +6,10 @@ using UnityEngine;
 public interface ILoader<key,value> // Generic
 {
     Dictionary<key,value> MakeDict();
+
+    // Validate() : 예정
+    // 런타임 중 데이터를 확인하는 방식이 위험할 수 있으므로
+    // 데이터 변질 여부 등을 첫 로딩 때 검사하기 위함
 }
 public class DataManager
 {
