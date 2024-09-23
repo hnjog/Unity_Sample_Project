@@ -180,7 +180,9 @@ public class Hero : Creature
                 return;
             }
 
-            ChaseOrAttackTarget(AttackDistance, HERO_SEARCH_DISTANCE);
+            SkillBase skill = Skills.GetReadySkill();
+            //ChaseOrAttackTarget(AttackDistance, HERO_SEARCH_DISTANCE);
+            ChaseOrAttackTarget(HERO_SEARCH_DISTANCE, skill);
             return;
         }
 
@@ -205,7 +207,8 @@ public class Hero : Creature
                 return;
             }
 
-            ChaseOrAttackTarget(AttackDistance, HERO_SEARCH_DISTANCE);
+            SkillBase skill = Skills.GetReadySkill();
+            ChaseOrAttackTarget(HERO_SEARCH_DISTANCE, skill);
             return;
         }
 
@@ -298,13 +301,5 @@ public class Hero : Creature
     public override void OnAnimEventHandler(TrackEntry trackEntry, Spine.Event e)
     {
         base.OnAnimEventHandler(trackEntry, e);
-
-        CreatureState = ECreatureState.Move;
-
-        if (Target.IsValid() == false)
-            return;
-
-        // 피해를 받는 입장에서 처리
-        Target.OnDamaged(this);
     }
 }
