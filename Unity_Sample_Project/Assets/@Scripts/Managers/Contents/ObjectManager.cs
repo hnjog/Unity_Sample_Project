@@ -12,6 +12,7 @@ public class ObjectManager
     public HashSet<Hero> Heroes { get; } = new HashSet<Hero>();
     public HashSet<Monster> Monsters { get; } = new HashSet<Monster>();
     public HashSet<Env> Envs { get; } = new HashSet<Env>();
+    public HashSet<Projectile> Projectiles { get; } = new HashSet<Projectile>();
     public HeroCamp Camp { get; private set; }
 
     #region Roots
@@ -28,6 +29,7 @@ public class ObjectManager
     public Transform HeroRoot { get { return GetRootTransform("@Heroes"); } }
     public Transform MonsterRoot { get { return GetRootTransform("@Monsters"); } }
     public Transform EnvRoot { get { return GetRootTransform("@Envs"); } }
+    public Transform ProjectileRoot { get { return GetRootTransform("@Projectiles"); } }
     #endregion
 
     public T Spawn<T>(Vector3 position,int templateID) where T : BaseObject
@@ -68,16 +70,15 @@ public class ObjectManager
         }
         else if (obj.ObjectType == EObjectType.Projectile)
         {
+            obj.transform.parent = ProjectileRoot;
 
+            Projectile projectile = go.GetComponent<Projectile>();
+            Projectiles.Add(projectile);
+
+            projectile.SetInfo(templateID);
         }
         else if (obj.ObjectType == EObjectType.Env)
         {
-            if (templateID != 0 && Managers.Data.EnvDic.TryGetValue(templateID, out Data.EnvData data) == false)
-            {
-                Debug.LogError($"ObjectManager Spawn Env Failed! TryGetValue TemplateID : {templateID}");
-                return null;
-            }
-
             obj.transform.parent = EnvRoot;
 
             Env env = go.GetComponent<Env>();
@@ -114,7 +115,8 @@ public class ObjectManager
         }
         else if (obj.ObjectType == EObjectType.Projectile)
         {
-
+            Projectile projectile = obj as Projectile;
+            Projectiles.Remove(projectile);
         }
         else if (obj.ObjectType == EObjectType.Env)
         {
