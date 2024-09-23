@@ -110,14 +110,6 @@ public class Hero : Creature
     }
 
     #region AI
-    public float AttackDistance
-    {
-        get
-        {
-            float targetRadius = (Target.IsValid() ? Target.ColliderRadius : 0);
-            return ColliderRadius + targetRadius + 2.0f;
-        }
-    }
 
     protected override void UpdateIdle()
     {

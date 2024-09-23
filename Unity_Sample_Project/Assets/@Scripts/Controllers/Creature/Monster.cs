@@ -128,17 +128,19 @@ public class Monster : Creature
 
     protected override void UpdateSkill()
     {
-        // 대기 끝나지 않았음
-        if (_coWait != null)
+        // 애니메이션 쪽에서 상태를 바꿔주도록 설정하였으므로
+        if(Target.IsValid() == false)
+        {
+            Target = null;
+            _destPos = _initPos;
+            CreatureState = ECreatureState.Move;
             return;
-
-        // 이동 상태로 돌아감
-        CreatureState = ECreatureState.Move;
+        }
     }
 
     protected override void UpdateDead()
     {
-
+        SetRigidBodyVelocity(Vector2.zero);
     }
     #endregion
 

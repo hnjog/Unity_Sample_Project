@@ -325,29 +325,4 @@ public class Creature : BaseObject
     }
     #endregion
 
-    #region Wait
-    // 이 방식 말고도 float 용 변수를 따로 빼는 방식도 존재함
-    protected Coroutine _coWait;
-
-    protected void StartWait(float seconds)
-    {
-        // 이미 기다리는 경우 취소시킴
-        CancelWait();
-        _coWait = StartCoroutine(CoWait(seconds));
-    }
-
-    // 지정 시간을 대기하는 코루틴
-    IEnumerator CoWait(float seconds)
-    {
-        yield return new WaitForSeconds(seconds);
-        _coWait = null;
-    }
-
-    protected void CancelWait()
-    {
-        if (_coWait != null)
-            StopCoroutine(_coWait);
-        _coWait = null;
-    }
-    #endregion
 }
