@@ -24,7 +24,8 @@ public class GameScene : BaseScene
         {
             // 게임 신에서 직접 생성하면 관리가 어려워짐
             // 생성용 클래스
-            int heroTemplateID = HERO_WIZARD_ID + Random.Range(0,5);
+            //int heroTemplateID = HERO_WIZARD_ID + Random.Range(0,5);
+            int heroTemplateID = HERO_WIZARD_ID;
             Hero temp = Managers.Object.Spawn<Hero>(new Vector3(-10 + Random.Range(-5,5), -5 + Random.Range(-5, 5), 0), heroTemplateID);
         }
 
@@ -34,8 +35,9 @@ public class GameScene : BaseScene
         Managers.UI.ShowBaseUI<UI_Joystick>();
 
         {
-            Managers.Object.Spawn<Monster>(new Vector3Int(0, 1, 0), MONSTER_BEAR_ID);
+            //Managers.Object.Spawn<Monster>(new Vector3Int(0, 1, 0), MONSTER_BEAR_ID);
             //Managers.Object.Spawn<Monster>(new Vector3Int(1, 1, 0), MONSTER_SLIME_ID);
+            Managers.Object.Spawn<Monster>(new Vector3(3, 1, 0), MONSTER_GOBLIN_ARCHER_ID);
         }
 
         {
