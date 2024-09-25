@@ -57,11 +57,12 @@ public class DataTransformer : EditorWindow
 
             // TestData 가 일단 위쪽에서 사용 중
             LoaderData loaderData = new LoaderData();
+            // 부모것을 나중에 가져 오도록
+            var fields = GetFieldsInBase(typeof(LoaderData));
 
             // TestData의 모든 필드(변수 요소들)를 가져온다
-            System.Reflection.FieldInfo[] fields = typeof(LoaderData).GetFields();
             // 필드를 순회하여 개체의 해당 필드를 가져온다
-            for (int f = 0; f < fields.Length; f++)
+            for (int f = 0; f < fields.Count; f++)
             {
                 // 해당 제네릭 타입의 타입 - 필드 정보를
                 // 미리 가져온 이름으로 가져온다
@@ -121,6 +122,38 @@ public class DataTransformer : EditorWindow
             genericList.Add(item);
 
         return genericList;
+    }
+
+    public static List<FieldInfo> GetFieldsInBase(Type type, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+    {
+        List<FieldInfo> fields = new List<FieldInfo>();
+        HashSet<string> fieldNames = new HashSet<string>(); // 중복방지
+        Stack<Type> stack = new Stack<Type>();
+
+        // 해당 타입의 부모 타입을 stack에 추가하기
+        // 나 -> 부모 -> 부모의 부모...
+        while (type != typeof(object))
+        {
+            stack.Push(type);
+            type = type.BaseType;
+        }
+
+        // 해당 타입에 맞도록 
+        // 자신부터 위쪽까지 field 값을 가져오기
+        while (stack.Count > 0)
+        {
+            Type currentType = stack.Pop();
+
+            foreach (var field in currentType.GetFields(bindingFlags))
+            {
+                if (fieldNames.Add(field.Name))
+                {
+                    fields.Add(field);
+                }
+            }
+        }
+
+        return fields;
     }
     #endregion
 
