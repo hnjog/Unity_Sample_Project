@@ -123,4 +123,62 @@ public class BaseObject : InitBase
         Debug.Log("OnAnimEventHandler");
     }
     #endregion
+
+    #region Map
+    // tranform과 cell position은 다르기에
+    // tranform을 기준으로 그릴때, 당장 Cell position에 맞지 않더라도
+    // 해당 위치에 이동시킬 필요가 있음
+    // 그렇기에 Lerp하게 근처의 Cell Pos로 이동하는 중이라는 조건 여부 변수
+    public bool LerpCellPosCompleted { get; protected set; }
+
+    // 맵 상에서의 그리드 위치
+    Vector3Int _cellPos;
+    public Vector3Int CellPos
+    {
+        get { return _cellPos; }
+        protected set
+        {
+            _cellPos = value;
+            LerpCellPosCompleted = false;
+        }
+    }
+
+    public void SetCellPos(Vector3Int cellPos, bool forceMove = false)
+    {
+        CellPos = cellPos;
+        LerpCellPosCompleted = false;
+
+        // 이중적인 좌표 관리 중이나
+        // 무조건 일치하는것이 필요한 경우에 사용 (ex : Spawn)
+        if (forceMove)
+        {
+            transform.position = Managers.Map.Cell2World(CellPos);
+            LerpCellPosCompleted = true;
+        }
+    }
+
+    public void LerpToCellPos(float moveSpeed)
+    {
+        if (LerpCellPosCompleted)
+            return;
+
+        Vector3 destPos = Managers.Map.Cell2World(CellPos);
+        Vector3 dir = destPos - transform.position;
+
+        if (dir.x < 0)
+            LookLeft = true;
+        else
+            LookLeft = false;
+
+        if (dir.magnitude < 0.01f)
+        {
+            transform.position = destPos;
+            LerpCellPosCompleted = true;
+            return;
+        }
+
+        float moveDist = Mathf.Min(dir.magnitude, moveSpeed * Time.deltaTime);
+        transform.position += dir.normalized * moveDist;
+    }
+    #endregion
 }
