@@ -16,11 +16,6 @@ public class MapEditor : MonoBehaviour
     [MenuItem("Tools/GenerateMap %#m")]
     private static void GenerateMap()
     {
-        // Map : 그리드 방식
-        // - 클라이언트에서라면 물리법칙을 이용할 수 있으나
-        // 서버에서는 매우 부하가 큰 작업이기에 보통 MMO 등에서는 이러한 Grid 방식을 통해
-        // 이동과 길찾기 등을 고려한다 
-        //
         // 선택된 오브젝트 대상으로
         GameObject[] gameObjects = Selection.gameObjects;
 
