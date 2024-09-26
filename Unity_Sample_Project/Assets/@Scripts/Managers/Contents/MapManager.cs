@@ -10,6 +10,7 @@ public class MapManager
     // - 클라이언트에서라면 물리법칙을 이용할 수 있으나
     // 서버에서는 매우 부하가 큰 작업이기에 보통 MMO 등에서는 이러한 Grid 방식을 통해
     // 이동과 길찾기 등을 고려한다 
+    // 그렇다고 Collider 등은 안쓰는 것은 아니다 (스킬 판정 체크 등에 유용)
 
     public GameObject Map { get; private set; }
     public string MapName { get; private set; }
@@ -96,6 +97,27 @@ public class MapManager
                 }
             }
         }
+    }
+
+    public bool MoveTo(Creature obj, Vector3Int cellPos, bool forceMove = false)
+    {
+        if (CanGo(cellPos) == false)
+            return false;
+
+        // 기존 좌표에 있던 오브젝트를 밀어준다.
+        // (이전 위치에서 제거)
+        // (단, 처음 신청했으면 해당 CellPos의 오브젝트가 본인이 아닐 수도 있음)
+        RemoveObject(obj);
+
+        // 새 좌표에 오브젝트를 등록한다.
+        AddObject(obj, cellPos);
+
+        // 셀 좌표 이동
+        obj.SetCellPos(cellPos, forceMove);
+
+        //Debug.Log($"Move To {cellPos}");
+
+        return true;
     }
 
     #region Helpers
