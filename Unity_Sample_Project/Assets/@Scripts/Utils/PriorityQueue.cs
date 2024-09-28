@@ -16,8 +16,9 @@ public class PriorityQueue<T> where T : IComparable<T>
 		// 도장깨기를 시작
 		while (now > 0)
 		{
-			// 도장깨기를 시도
+			// 트리 구조를 감안하여 부모 인덱스 계산
 			int next = (now - 1) / 2;
+			// 자신과 부모를 비교
 			if (_heap[now].CompareTo(_heap[next]) < 0)
 				break; // 실패
 
@@ -26,7 +27,7 @@ public class PriorityQueue<T> where T : IComparable<T>
 			_heap[now] = _heap[next];
 			_heap[next] = temp;
 
-			// 검사 위치를 이동한다
+			// 검사 위치를 이동하여 재정렬
 			now = next;
 		}
 	}
