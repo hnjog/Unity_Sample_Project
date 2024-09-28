@@ -296,7 +296,28 @@ public class Creature : BaseObject
         if (LerpCellPosCompleted == false)
             return EFindPathResult.Fail_LerpCell;
 
-        Vector3Int dirCellPos = destCellPos - CellPos;
+        List<Vector3Int> path = Managers.Map.FindPath(CellPos, destCellPos, maxDepth);
+
+        // path 크기가 너무 작음(1이하)
+        // 제대로된 길이 아님
+
+        if (path.Count < 2)
+            return EFindPathResult.Fail_NoPath;
+
+        // 근처라도 괜찮다
+        // 목표 근처에서 비비는 경우에 대한 임시 처리용
+        if (forceMoveCloser)
+        {
+            // 현재 ~ 목적지 , 경로 ~ 목적지 를 비교하여
+            // 현재~ 목적지 상태가 '다음 경로 ~ 목적지' 보다 가깝다면
+            // 더 진행할 필요가 없음
+            Vector3Int diff1 = CellPos - destCellPos;
+            Vector3Int diff2 = path[1] - destCellPos;
+            if (diff1.sqrMagnitude <= diff2.sqrMagnitude)
+                return EFindPathResult.Fail_NoPath;
+        }
+
+        Vector3Int dirCellPos = path[1] - CellPos;
         Vector3Int nextPos = CellPos + dirCellPos;
 
         if (Managers.Map.MoveTo(this, nextPos) == false)
