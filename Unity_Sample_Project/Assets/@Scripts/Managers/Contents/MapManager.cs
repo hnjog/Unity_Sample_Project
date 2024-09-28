@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -205,6 +206,169 @@ public class MapManager
     public void ClearObjects()
     {
         _cells.Clear();
+    }
+
+    #endregion
+
+    // BFS vs 다익스트라 vs A*
+    // BFS : 너비 우선 탐색
+    // 일반적인 최소 거리 탐색법
+    // 시작점에서 모든 탐색지를 탐색하여 목적지를 찾는 방식
+    // 하위의 다익스트라, A* 역시 BFS의 변형이다
+    //
+    // 다익스트라 
+    // : 그래프 탐색 알고리즘 중 하나,(탐욕)
+    // '현재까지 알려진 최단 경로 중' 가중치가 작은 노드를 '우선적'으로 방문하는 방식
+    // 우선적으로 탐색하기에 '우선순위 큐'가 사용된다
+    //
+    // A* : 다익스트라의 변형으로 '휴리스틱' 정보를 통하여 효율을 높임
+    // 휴리스틱으로 '노드'에 대한 '가중치'를 비교하는 것이 가장 큰 특징이다
+    // (일반적인 다익스트라는 각 노드의 가중치가 일정한 편이다)
+    //
+    // '한 번에 길을 찾는 경우'
+    // 알고보니 해당 위치가 '막혀 있는 경우'
+    // 거의 모든 경우에 대한 탐색을 하기에
+    // BFS와 다를 게 없음
+    //
+    // 다만 알고보니 멀리 돌아가는 길이 있었다던가 하는 경우는,
+    // 이 경우가 '올바른 경로'를 찾을 수 있었으므로 유용함
+    //
+    // 반대로 '여러 번 나누어 찾는 경우'
+    // 멀리 돌아갈 때, 올바른 경로를 찾을 수 없어서 벽에 박힐 수 있지만
+    // 연산 시간을 절약할 수 있음
+
+    #region A* PathFinding
+    public struct PQNode : IComparable<PQNode>
+    {
+        public int H; // Heuristic (목적지 까지의 거리)
+        public Vector3Int CellPos;
+        public int Depth; // 도착할때까지 건너온 칸 수
+
+        public int CompareTo(PQNode other)
+        {
+            if (H == other.H)
+                return 0;
+            return H < other.H ? 1 : -1;
+        }
+    }
+
+    // 가중치 (현재는 8 방향 모두 동일하게 설정)
+    List<Vector3Int> _delta = new List<Vector3Int>()
+    {
+        new Vector3Int(0, 1, 0), // U
+		new Vector3Int(1, 1, 0), // UR
+		new Vector3Int(1, 0, 0), // R
+		new Vector3Int(1, -1, 0), // DR
+		new Vector3Int(0, -1, 0), // D
+		new Vector3Int(-1, -1, 0), // LD
+		new Vector3Int(-1, 0, 0), // L
+		new Vector3Int(-1, 1, 0), // LU
+	};
+
+    public List<Vector3Int> FindPath(Vector3Int startCellPos, Vector3Int destCellPos, int maxDepth = 10)
+    {
+        // 지금까지 제일 좋은 후보 기록.
+        Dictionary<Vector3Int, int> best = new Dictionary<Vector3Int, int>();
+
+        // 경로 추적 용도.
+        Dictionary<Vector3Int, Vector3Int> parent = new Dictionary<Vector3Int, Vector3Int>();
+
+        // 현재 발견된 후보 중에서 가장 좋은 후보를 빠르게 뽑아오기 위한 도구.
+        PriorityQueue<PQNode> pq = new PriorityQueue<PQNode>(); // OpenList
+
+        Vector3Int pos = startCellPos;
+        Vector3Int dest = destCellPos;
+
+        // destCellPos에 도착 못하더라도 제일 가까운 애로.
+        Vector3Int closestCellPos = startCellPos;
+        int closestH = (dest - pos).sqrMagnitude;
+
+        // 시작점 발견 (예약 진행)
+        {
+            // 휴리스틱 비용 계산 (벡터의 크기)
+            int h = (dest - pos).sqrMagnitude;
+            pq.Push(new PQNode() { H = h, CellPos = pos, Depth = 1 });
+            parent[pos] = pos; // 시작점은 부모가 자기 자신 (판별 조건)
+            best[pos] = h;
+        }
+
+        // 사실 이 부분은 다익스트라 와 비슷하다
+        while (pq.Count > 0)
+        {
+            // 제일 좋은 후보를 찾는다
+            PQNode node = pq.Pop();
+            pos = node.CellPos;
+
+            // 목적지 도착했으면 바로 종료.
+            if (pos == dest)
+                break;
+
+            // 무한으로 깊이 들어가진 않음.
+            if (node.Depth >= maxDepth)
+                break;
+
+            // 상하좌우 등 이동할 수 있는 좌표인지 확인해서 예약한다.
+            foreach (Vector3Int delta in _delta)
+            {
+                Vector3Int next = pos + delta;
+
+                // 갈 수 없는 장소면 스킵.
+                if (CanGo(next) == false)
+                    continue;
+
+                // 예약 진행
+                int h = (dest - next).sqrMagnitude;
+
+                // 안에 값 없다면 최댓값으로 만들어준다
+                if (best.ContainsKey(next) == false)
+                    best[next] = int.MaxValue;
+
+                // 이미 더 좋은 값이 있다면 패스
+                if (best[next] <= h)
+                    continue;
+
+                best[next] = h;
+
+                pq.Push(new PQNode() { H = h, CellPos = next, Depth = node.Depth + 1 });
+                parent[next] = pos;
+
+                // 목적지까지는 못 가더라도, 그나마 제일 좋았던 후보 기억
+                if (closestH > h)
+                {
+                    closestH = h;
+                    closestCellPos = next;
+                }
+            }
+        }
+
+        // 목적지에 도달 못했으므로
+        // 제일 가까운 애라도 찾음
+        if (parent.ContainsKey(dest) == false)
+            return CalcCellPathFromParent(parent, closestCellPos);
+
+        return CalcCellPathFromParent(parent, dest);
+    }
+
+    List<Vector3Int> CalcCellPathFromParent(Dictionary<Vector3Int, Vector3Int> parent, Vector3Int dest)
+    {
+        List<Vector3Int> cells = new List<Vector3Int>();
+
+        if (parent.ContainsKey(dest) == false)
+            return cells;
+
+        Vector3Int now = dest;
+
+        // 거슬러 올라간다
+        while (parent[now] != now)
+        {
+            cells.Add(now);
+            now = parent[now];
+        }
+
+        cells.Add(now);
+        cells.Reverse();
+
+        return cells;
     }
 
     #endregion
