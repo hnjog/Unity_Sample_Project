@@ -146,9 +146,11 @@ public class BaseObject : InitBase
 
     public void LerpToCellPos(float moveSpeed)
     {
+        // 코루틴으로 주기적 호출 상태
         if (LerpCellPosCompleted)
             return;
 
+        // 실제 위치(transform)을 목표 위치(Cell Pos)로 이동시킨다
         Vector3 destPos = Managers.Map.Cell2World(CellPos);
         Vector3 dir = destPos - transform.position;
 
