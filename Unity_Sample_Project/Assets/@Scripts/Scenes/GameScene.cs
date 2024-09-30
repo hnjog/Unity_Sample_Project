@@ -40,15 +40,15 @@ public class GameScene : BaseScene
 
         Managers.UI.ShowBaseUI<UI_Joystick>();
 
-        {
-            Monster monster = Managers.Object.Spawn<Monster>(new Vector3(1, 1, 0), MONSTER_SLIME_ID);
-            Managers.Map.MoveTo(monster, new Vector3Int(0, 4, 0), true);
-        }
+        //{
+        //    Monster monster = Managers.Object.Spawn<Monster>(new Vector3(1, 1, 0), MONSTER_SLIME_ID);
+        //    Managers.Map.MoveTo(monster, new Vector3Int(0, 4, 0), true);
+        //}
 
-        {
-            Env env = Managers.Object.Spawn<Env>(new Vector3(0, 2, 0), ENV_TREE1_ID);
-            env.EnvState = EEnvState.Idle;
-        }
+        //{
+        //    Env env = Managers.Object.Spawn<Env>(new Vector3(0, 2, 0), ENV_TREE1_ID);
+        //    env.EnvState = EEnvState.Idle;
+        //}
 
         return true;
     }
