@@ -114,6 +114,31 @@ public static class Define
         Wall,
     }
 
+    public enum ESkillSlot
+    {
+        Default,
+        Env,
+        A,
+        B
+    }
+
+    public enum EIndicatorType
+    {
+        None,
+        Cone,
+        Rectangle,
+    }
+
+    public enum EEffectSize
+    {
+        CircleSmall,
+        CircleNormal,
+        CircleBig,
+        ConeSmall,
+        ConeNormal,
+        ConeBig,
+    }
+
     public const int CAMERA_PROJECTION_SIZE = 12;
 
     // HARD CODING

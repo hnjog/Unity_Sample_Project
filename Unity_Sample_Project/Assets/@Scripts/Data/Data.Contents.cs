@@ -2,15 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 namespace Data
 {
-    #region CreatureData
+
     // 데이터 시트에서 받을 데이터 목록을 
     // 하나의 클래스로 묘사 -> 이를 Reflection 문법을 통해
     // Binary 데이터를 클래스에 맞게 매핑해준다
     // 데이터로 '사용할' 포맷 정도로 인식하는 클래스
     // '직렬화' 속성을 통해 해당 클래스 데이터를 다른 형식(Binary, JSON, XML 등)으로 변환 가능하도록 선언 
+    #region CreatureData
     [Serializable]
     public class CreatureData
     {
@@ -20,37 +22,20 @@ namespace Data
         public float ColliderOffsetX;
         public float ColliderOffsetY;
         public float ColliderRadius;
-        public float Mass;
         public float MaxHp;
-        public float MaxHpBonus;
+        public float UpMaxHpBonus;
         public float Atk;
         public float AtkRange;
         public float AtkBonus;
-        public float Def;
         public float MoveSpeed;
-        public float TotalExp;
-        public float HpRate;
-        public float AtkRate;
-        public float DefRate;
-        public float MoveSpeedRate;
+        public float CriRate;
+        public float CriDamage;
         public string IconImage;
         public string SkeletonDataID;
-        public string AnimatorName;
-        public List<int> SkillIdList = new List<int>();
-    }
-
-    [Serializable]
-    public class CreatureDataLoader : ILoader<int, CreatureData>
-    {
-        public List<CreatureData> creatures = new List<CreatureData>();
-
-        public Dictionary<int, CreatureData> MakeDict()
-        {
-            Dictionary<int, CreatureData> dict = new Dictionary<int, CreatureData>();
-            foreach (CreatureData creature in creatures)
-                dict.Add(creature.DataId, creature);
-            return dict;
-        }
+        public int DefaultSkillId;
+        public int EnvSkillId;
+        public int SkillAId;
+        public int SkillBId;
     }
     #endregion
 
@@ -102,7 +87,6 @@ namespace Data
         public int DataId;
         public string Name;
         public string ClassName;
-        public string ComponentName;
         public string Description;
         public int ProjectileId;
         public string PrefabLabel;
@@ -111,13 +95,15 @@ namespace Data
         public float CoolTime;
         public float DamageMultiplier;
         public float Duration;
-        public float NumProjectiles;
+        public float AnimImpactDuration;
         public string CastingSound;
-        public float AngleBetweenProj;
         public float SkillRange;
-        public float RotateSpeed;
         public float ScaleMultiplier;
-        public float AngleRange;
+        public int TargetCount;
+        public List<int> EffectIds = new List<int>();
+        public int NextLevelId;
+        public int AoEId;
+        public EEffectSize EffectSize;
     }
 
     [Serializable]
@@ -141,12 +127,11 @@ namespace Data
     {
         public int DataId;
         public string Name;
+        public string ClassName;
         public string ComponentName;
         public string ProjectileSpriteName;
         public string PrefabLabel;
         public float Duration;
-        public float NumBounce;
-        public float NumPenerations;
         public float HitSound;
         public float ProjRange;
         public float ProjSpeed;
