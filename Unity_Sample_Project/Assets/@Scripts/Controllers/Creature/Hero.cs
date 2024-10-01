@@ -74,9 +74,6 @@ public class Hero : Creature
 
         // State
         CreatureState = ECreatureState.Idle;
-
-        Skills = gameObject.GetOrAddComponent<SkillComponent>();
-        Skills.SetInfo(this, CreatureData.SkillIdList);
     }
 
     public Transform HeroCampDest

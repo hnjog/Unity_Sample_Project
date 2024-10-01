@@ -100,7 +100,8 @@ public class Creature : BaseObject
         sg.sortingOrder = SortingLayers.CREATURE;
 
         // Skills
-        // CreatureData.SkillIdList;
+        Skills = gameObject.GetOrAddComponent<SkillComponent>();
+        Skills.SetInfo(this, CreatureData);
 
         // Stat
         MaxHp = CreatureData.MaxHp;

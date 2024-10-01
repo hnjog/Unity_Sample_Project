@@ -54,10 +54,6 @@ public class Monster : Creature
         base.SetInfo(templateID);
 
         CreatureState = ECreatureState.Idle;
-
-        // Skill
-        Skills = gameObject.GetOrAddComponent<SkillComponent>();
-        Skills.SetInfo(this, CreatureData.SkillIdList);
     }
 
     void Start()
