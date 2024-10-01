@@ -78,7 +78,7 @@ public class Creature : BaseObject
         Collider.radius = CreatureData.ColliderRadius;
 
         // RigidBody
-        RigidBody.mass = CreatureData.Mass;
+        RigidBody.mass = 0;
 
         // Spine
         // 스켈레톤에 따라 프리팹을 별도로 만드는 방식도 존재
