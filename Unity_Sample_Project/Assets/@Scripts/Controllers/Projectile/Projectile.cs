@@ -48,7 +48,7 @@ public class Projectile : BaseObject
             Destroy(ProjectileMotion);
 
         // 클래스 이름으로 치환하여 사용
-        string componentName = skill.SkillData.ComponentName;
+        string componentName = ProjectileData.ComponentName;
         // 타입 정보를 통해 AddComponent 한다 (리플렉션)
         ProjectileMotion = gameObject.AddComponent(Type.GetType(componentName)) as ProjectileMotionBase;
 
