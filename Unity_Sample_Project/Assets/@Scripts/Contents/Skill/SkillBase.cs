@@ -72,7 +72,7 @@ public abstract class SkillBase : InitBase
         // 공속??
         float timeScale = 1.0f;
         
-        if (Owner.Skills.ActiveSkills[(int)Define.ESkillSlot.Default] == this)
+        if (Owner.Skills.SkillList[(int)Define.ESkillSlot.Default] == this)
             Owner.PlayAnimation(0, SkillData.AnimName, false).TimeScale = timeScale;
         else
             Owner.PlayAnimation(0, SkillData.AnimName, false).TimeScale = 1;
