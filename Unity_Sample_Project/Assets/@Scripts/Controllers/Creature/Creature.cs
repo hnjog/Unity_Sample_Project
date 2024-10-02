@@ -176,8 +176,66 @@ public class Creature : BaseObject
 
     protected virtual void UpdateIdle() { }
     protected virtual void UpdateMove() { }
-    protected virtual void UpdateSkill() { }
+    protected virtual void UpdateSkill() 
+    {
+        // 스킬 대기중이 아님
+        if (_coWait != null)
+            return;
+
+        // 타겟이 존재하지 않거나
+        // 이상한 타겟이 잡혔으면 무효 처리
+        if (Target.IsValid() == false || Target.ObjectType == EObjectType.HeroCamp)
+        {
+            CreatureState = ECreatureState.Idle;
+            return;
+        }
+
+        // 캐릭터 공격거리 체크
+        Vector3 dir = (Target.CenterPosition - CenterPosition);
+        float distToTargetSqr = dir.sqrMagnitude;
+        float attackDistanceSqr = AttackDistance * AttackDistance;
+        if (distToTargetSqr > attackDistanceSqr)
+        {
+            // 거리가 너무 멀다
+            CreatureState = ECreatureState.Idle;
+            return;
+        }
+
+        // DoSkill
+        Skills.CurrentSkill.DoSkill();
+
+        LookAtTarget(Target);
+
+        var trackEntry = SkeletonAnim.state.GetCurrent(0);
+        float delay = trackEntry.Animation.Duration;
+
+        StartWait(delay);
+    }
     protected virtual void UpdateDead() { }
+    #endregion
+
+    // 스킬 딜레이 체크를 위해 부활
+    #region Wait
+    protected Coroutine _coWait;
+
+    protected void StartWait(float seconds)
+    {
+        CancelWait();
+        _coWait = StartCoroutine(CoWait(seconds));
+    }
+
+    IEnumerator CoWait(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        _coWait = null;
+    }
+
+    protected void CancelWait()
+    {
+        if (_coWait != null)
+            StopCoroutine(_coWait);
+        _coWait = null;
+    }
     #endregion
 
     #region Battle
@@ -242,23 +300,17 @@ public class Creature : BaseObject
         return target;
     }
 
-    protected void ChaseOrAttackTarget(float chaseRange, SkillBase skill)
+    protected void ChaseOrAttackTarget(float chaseRange, float attackRange)
     {
         Vector3 dir = (Target.transform.position - transform.position);
         float distToTargetSqr = dir.sqrMagnitude;
-
-        float attackRange = HERO_DEFAULT_MELEE_ATTACK_RANGE;
-        if (skill.SkillData.ProjectileId != 0)
-            attackRange = HERO_DEFAULT_RANGED_ATTACK_RANGE;
-
-        float finalAttackRange = attackRange + Target.ColliderRadius + ColliderRadius;
-        float attackDistanceSqr = finalAttackRange * finalAttackRange;
+        float attackDistanceSqr = attackRange * attackRange;
 
         if (distToTargetSqr <= attackDistanceSqr)
         {
             // 공격 범위 이내로 들어왔다면 공격.
+            // 코루틴에서 UpdateSkill 호출
             CreatureState = ECreatureState.Skill;
-            skill.DoSkill();
             return;
         }
         else

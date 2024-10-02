@@ -293,6 +293,8 @@ public class Hero : Creature
 
     protected override void UpdateSkill()
     {
+        base.UpdateSkill();
+
         if (HeroMoveState == EHeroMoveState.ForceMove)
         {
             CreatureState = ECreatureState.Move;

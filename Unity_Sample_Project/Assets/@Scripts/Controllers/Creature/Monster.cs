@@ -135,6 +135,8 @@ public class Monster : Creature
 
     protected override void UpdateSkill()
     {
+        base.UpdateSkill();
+
         // 애니메이션 쪽에서 상태를 바꿔주도록 설정하였으므로
         if(Target.IsValid() == false)
         {
