@@ -120,7 +120,7 @@ public class Monster : Creature
         else
         {
             // Chase
-            SkillBase skill = Skills.GetReadySkill();
+            SkillBase skill = Skills.CurrentSkill;
             ChaseOrAttackTarget(MONSTER_SEARCH_DISTANCE, skill);
 
             // 너무 멀어지면 포기.

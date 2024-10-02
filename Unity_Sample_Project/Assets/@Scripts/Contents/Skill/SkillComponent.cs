@@ -5,10 +5,28 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using static Define;
+using Random = UnityEngine.Random;
 
 public class SkillComponent : InitBase
 {
+    // 내가 들고 있는 스킬 (여기서 slot Enum을 이용해서 스킬 가져다 사용)
     public List<SkillBase> SkillList { get; } = new List<SkillBase>();
+
+    // 사용 가능한 스킬
+    public List<SkillBase> ActiveSkills { get; set; } = new List<SkillBase>();
+
+    public SkillBase CurrentSkill
+    {
+        get
+        {
+            if (ActiveSkills.Count == 0)
+                return SkillList[(int)ESkillSlot.Default];
+
+            // 사용 가능한 skill 중 랜덤으로
+            int randomIndex = Random.Range(0, ActiveSkills.Count);
+            return ActiveSkills[randomIndex];
+        }
+    }
 
     Creature _owner;
 
@@ -33,8 +51,12 @@ public class SkillComponent : InitBase
 
     public void AddSkill(int skillTemplateID , ESkillSlot skillSlot)
     {
-        if (skillTemplateID <= 0) 
+        // ID가 잘못된 경우이다
+        if (skillTemplateID <= 0)
+        {
+            Debug.LogWarning($"SkillID Weird : {skillTemplateID}");
             return;
+        }
 
         if(Managers.Data.SkillDic.TryGetValue(skillTemplateID, out var data) == false)
         {
@@ -51,11 +73,15 @@ public class SkillComponent : InitBase
         skill.SetInfo(_owner, skillTemplateID);
 
         SkillList.Add(skill);
+        switch (skillSlot)
+        {
+            case ESkillSlot.A:
+                ActiveSkills.Add(skill);
+                break;
+            case ESkillSlot.B:
+                ActiveSkills.Add(skill);
+                break;
+        }
     }
 
-    public SkillBase GetReadySkill()
-    {
-        // TEMP
-        return SkillList[0];
-    }
 }
