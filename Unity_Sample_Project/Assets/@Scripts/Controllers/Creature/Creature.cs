@@ -33,6 +33,19 @@ public class Creature : BaseObject
     public float MoveSpeed { get; set; }
     #endregion
 
+    protected float AttackDistance
+    {
+        get
+        {
+            float env = 2.2f;
+            if (Target != null && Target.ObjectType == EObjectType.Env)
+                return Mathf.Max(env, Collider.radius + Target.Collider.radius + 0.1f);
+
+            float baseValue = CreatureData.AtkRange;
+            return baseValue;
+        }
+    }
+
     protected ECreatureState _creatureState = ECreatureState.None;
     // 하위 크리쳐에서
     // 오버라이드 하여, 처리를 바꿀 수 있음

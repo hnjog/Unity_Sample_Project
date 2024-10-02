@@ -159,8 +159,7 @@ public class Hero : Creature
                 return;
             }
 
-            SkillBase skill = Skills.CurrentSkill;
-            ChaseOrAttackTarget(HERO_SEARCH_DISTANCE, skill);
+            ChaseOrAttackTarget(HERO_SEARCH_DISTANCE, AttackDistance);
             return;
         }
 
@@ -185,8 +184,7 @@ public class Hero : Creature
                 return;
             }
 
-            SkillBase skill = Skills.CurrentSkill;
-            ChaseOrAttackTarget(HERO_SEARCH_DISTANCE, skill);
+            ChaseOrAttackTarget(HERO_SEARCH_DISTANCE, AttackDistance);
             return;
         }
 
