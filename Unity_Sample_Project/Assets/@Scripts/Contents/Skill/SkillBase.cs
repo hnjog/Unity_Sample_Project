@@ -9,6 +9,8 @@ public abstract class SkillBase : InitBase
 {
     // 스킬 사용자
     public Creature Owner { get; protected set; }
+    // 쿨타임
+    public float RemainCoolTime { get; set; }
 
     // 같은 스킬이라도 레벨 등이 다를 수 있으므로
     public Data.SkillData SkillData { get; private set; }
@@ -63,7 +65,34 @@ public abstract class SkillBase : InitBase
 
     public virtual void DoSkill()
     {
+        // 여기서 쿨타임 관리?
+        RemainCoolTime = SkillData.CoolTime;
 
+        // 자신을 준비된 스킬에서 해제 시킨다
+        if (Owner.Skills != null)
+            Owner.Skills.ActiveSkills.Remove(this);
+
+        // 공속??
+        float timeScale = 1.0f;
+        
+        if (Owner.Skills.ActiveSkills[(int)Define.ESkillSlot.Default] == this)
+            Owner.PlayAnimation(0, SkillData.AnimName, false).TimeScale = timeScale;
+        else
+            Owner.PlayAnimation(0, SkillData.AnimName, false).TimeScale = 1;
+
+        // 쿨타임 코루틴
+        StartCoroutine(CoCountdownCooldown());
+    }
+
+    private IEnumerator CoCountdownCooldown()
+    {
+        RemainCoolTime = SkillData.CoolTime;
+        yield return new WaitForSeconds(SkillData.CoolTime);
+        RemainCoolTime = 0;
+
+        // 준비된 스킬에 추가
+        if (Owner.Skills != null)
+            Owner.Skills.ActiveSkills.Add(this);
     }
 
     protected virtual void GenerateProjectile(Creature owner, Vector3 spawnPos)
