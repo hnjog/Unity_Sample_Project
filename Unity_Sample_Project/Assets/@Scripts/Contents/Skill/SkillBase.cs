@@ -33,10 +33,8 @@ public abstract class SkillBase : InitBase
         {
             // 스켈레톤 애니메이션 시작, 종료 시에 따른 이벤트 등록(Delegate) - 보통은 Init 말고도 종료시에도 빼주는 것이 안정적
             // 메모리 릭 방지
-            Owner.SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
-            Owner.SkeletonAnim.AnimationState.Event += OnAnimEventHandler;
-            Owner.SkeletonAnim.AnimationState.Complete -= OnAnimCompleteHandler;
-            Owner.SkeletonAnim.AnimationState.Complete += OnAnimCompleteHandler;
+            Owner.SkeletonAnim.AnimationState.Event -= OnOwnerAnimEventHandler;
+            Owner.SkeletonAnim.AnimationState.Event += OnOwnerAnimEventHandler;
         }
     }
 
@@ -59,8 +57,7 @@ public abstract class SkillBase : InitBase
             return;
 
         // Delegate 에서 이벤트 제거해준다
-        Owner.SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
-        Owner.SkeletonAnim.AnimationState.Complete -= OnAnimCompleteHandler;
+        Owner.SkeletonAnim.AnimationState.Event -= OnOwnerAnimEventHandler;
     }
 
     public virtual void DoSkill()
@@ -118,6 +115,12 @@ public abstract class SkillBase : InitBase
         projectile.SetSpawnInfo(Owner, this, excludeMask);
     }
 
-    protected abstract void OnAnimEventHandler(TrackEntry trackEntry, Event e);
-    protected abstract void OnAnimCompleteHandler(TrackEntry trackEntry);
+    private void OnOwnerAnimEventHandler(TrackEntry trackEntry, Event e)
+    {
+        // 다른스킬의 애니메이션 이벤트도 받기 때문에 자기꺼만 써야함
+        if (trackEntry.Animation.Name == SkillData.AnimName)
+            OnAttackEvent();
+    }
+
+    protected abstract void OnAttackEvent();
 }

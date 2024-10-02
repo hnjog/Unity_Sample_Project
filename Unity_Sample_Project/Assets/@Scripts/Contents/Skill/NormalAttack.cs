@@ -27,15 +27,8 @@ public class NormalAttack : SkillBase
 
         Owner.LookAtTarget(Owner.Target);
     }
-    protected override void OnAnimEventHandler(TrackEntry trackEntry, Spine.Event e)
-    {
-        if(e.ToString().Contains(SkillData.AnimName))
-        {
-            OnAttackEvent();
-        }
-    }
 
-    protected virtual void OnAttackEvent()
+    protected override void OnAttackEvent()
     {
         if (Owner.Target.IsValid() == false)
             return;
@@ -50,18 +43,6 @@ public class NormalAttack : SkillBase
             // Ranged
             GenerateProjectile(Owner, Owner.CenterPosition);
         }
-    }
-    protected override void OnAnimCompleteHandler(TrackEntry trackEntry)
-    {
-        if (Owner.Target.IsValid() == false)
-            return;
-
-        // 애니메이션 해제 시,
-        // 여전히 Skill 상태라면 강제로 이동 상태로 바꾸어준다
-        // 이미 Skill 상태가 끝난 경우에는 문제가 없으나,
-        // 그렇지 않은 경우는 ForceMove 등으로 상태가 캔슬된 경우를 대비
-        if (Owner.CreatureState == Define.ECreatureState.Skill)
-            Owner.CreatureState = Define.ECreatureState.Move;
     }
     
 }
