@@ -41,6 +41,17 @@ public class BaseObject : InitBase
         return true;
     }
 
+    protected virtual void OnDisable()
+    {
+        if (SkeletonAnim == null)
+            return;
+
+        if (SkeletonAnim.AnimationState == null)
+            return;
+
+        SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
+    }
+
     public void LookAtTarget(BaseObject target)
     {
         Vector2 dir = target.transform.position - transform.position;
@@ -48,6 +59,13 @@ public class BaseObject : InitBase
             LookLeft = true;
         else
             LookLeft = false;
+    }
+
+    public static Vector3 GetLookAtRotation(Vector3 dir)
+    {
+        float angle = Mathf.Atan2(-dir.x, dir.y) * Mathf.Rad2Deg;
+
+        return new Vector3(0,0,angle);
     }
 
     #region Battle
