@@ -130,4 +130,62 @@ public class ObjectManager
 
         Managers.Resource.Destroy(obj.gameObject);
     }
+
+    #region Skill 판정
+    public List<Creature> FindConeRangeTargets(Creature owner, Vector3 dir, float range, int angleRange, bool isAllies = false)
+    {
+        List<Creature> targets = new List<Creature>();
+        List<Creature> ret = new List<Creature>();
+
+        ECreatureType targetType = Util.DetermineTargetType(owner.CreatureType, isAllies);
+
+        if (targetType == ECreatureType.Monster)
+        {
+            var objs = Managers.Map.GatherObjects<Monster>(owner.transform.position, range, range);
+            targets.AddRange(objs);
+        }
+        else if (targetType == ECreatureType.Hero)
+        {
+            var objs = Managers.Map.GatherObjects<Hero>(owner.transform.position, range, range);
+            targets.AddRange(objs);
+        }
+
+        foreach (var target in targets)
+        {
+            // 1. 거리안에 있는지 확인
+            var targetPos = target.transform.position;
+            float distance = Vector3.Distance(targetPos, owner.transform.position);
+
+            // 거리 너무 멀다
+            if (distance > range)
+                continue;
+
+            // 2. 각도 확인
+            if (angleRange != 360)
+            {
+                BaseObject ownerTarget = (owner as Creature).Target;
+
+                // 2. 부채꼴 모양 각도 계산
+                // 내적을 통해서
+                // 사용자가 타겟을 바라보는 방향과, 현재 dir(시전자가 주시하는 방향)을 내적하여
+                // -1 ~ 1 의 값을 얻는다 (1 : 두 벡터가 같은 방향, 0 : 수직, -1 두 벡터가 반대 방향)
+                float dot = Vector3.Dot((targetPos - owner.transform.position).normalized, dir.normalized);
+                // 아크 코사인 * 라디안to각도 를 통하여 실제 각도 계산
+                float degree = Mathf.Rad2Deg * Mathf.Acos(dot);
+
+                // dir이 바라보는 방향을 기준으로
+                // angleRange는 원뿔 모양이다
+                // 따라서 해당 기점에서 왼쪽과 오른쪽을 탐색하므로
+                // 절반을 나누어야 합당한 탐색이 가능하다
+                if (degree > angleRange / 2f)
+                    continue;
+            }
+
+            ret.Add(target);
+        }
+
+        return ret;
+    }
+
+    #endregion
 }
