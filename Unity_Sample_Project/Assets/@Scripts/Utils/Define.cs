@@ -139,6 +139,10 @@ public static class Define
         ConeBig,
     }
 
+    public const float EFFECT_SMALL_RADIUS = 2.5f;
+    public const float EFFECT_NORMAL_RADIUS = 4.5f;
+    public const float EFFECT_BIG_RADIUS = 5.5f;
+
     public const int CAMERA_PROJECTION_SIZE = 12;
 
     // HARD CODING
