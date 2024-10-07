@@ -2,7 +2,7 @@ Shader "SkillIndicator/Circle"
 {
     Properties 
     {
-        [Header(Base)]
+        [Header(Base)] // 툴상에서 보기 편하게
         _Color("Color", Color) = (1,1,1,1)
         _MainTex("MainTex", 2D) = "white" {}
         _Intensity("Intensity", float) = 1
@@ -56,6 +56,8 @@ Shader "SkillIndicator/Circle"
                 float2 uv : TEXCOORD0;
             };
 
+            // 일종의 버퍼 (GPU에 보내줄 데이터들)
+            // 위쪽의 Properties 에서 선언한 변수들
             CBUFFER_START(UnityPerMaterial)
             half4 _Color;
             half _Intensity;
@@ -74,9 +76,10 @@ Shader "SkillIndicator/Circle"
 
             Varyings vert(Attributes v) 
             {
-                Varyings o = (Varyings)0;
-                o.uv = v.texcoord;
-                o.positionCS = TransformObjectToHClip(v.positionOS.xyz);
+                // vs용 데이터 전달 구조체
+                Varyings o = (Varyings)0; // 초기화
+                o.uv = v.texcoord; // 텍스쳐 좌표
+                o.positionCS = TransformObjectToHClip(v.positionOS.xyz); // 좌표 변환 (모델 -> 클립(렌더링 파이프에서 사용하는 좌표))
                 return o;
             }
 
@@ -86,6 +89,7 @@ Shader "SkillIndicator/Circle"
                 half2 uv = i.uv;
 
                 // 텍스처 샘플링을 통해 픽셀 색상 얻어옴.
+                // uv 좌표를 통해 텍스쳐를 물체에 덮어씌운다 (전체를 사용할 수도, 아니면 일부분만 사용할 수도)
                 half4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
                 mainTex *= _Intensity;
 
@@ -94,12 +98,14 @@ Shader "SkillIndicator/Circle"
                 #endif
 
                 // 중앙을 기준으로 좌표 재계산 uv (0~1) -> center (-1~1)
+                // 이 마법진의 중앙을 기준으로 원형을 그리려는 목적이므로
                 float2 centerUV = (uv * 2 - 1);
 
                 // atan2(y,x) : atan(y/x)에 해당하는 함수로, 
                 // atan(x)는 [-π/2, π/2]의 범위의 값을 가지지만, atan2(y,x)는 [-π, π]의 값을 리턴한다.
                 // atan2(y,x)는 x≠0 이면 항상 올바른 값을 계산핤 수 있으므로 더 선호한다.
                 // 결론 : atan2UV : 0~1 사이의 값 (각도 비율)
+                // 중심 좌표에서의 '각도 계산'
                 float atan2UV = 1-abs(atan2(centerUV.g, centerUV.r)/3.14);
 
                 // _Sector : 일부분만 그릴지 여부 (0 or 1)
@@ -107,7 +113,8 @@ Shader "SkillIndicator/Circle"
                 // lerp(x,y,s) : 선형보간인 x + s(y - x) 를 리턴한다.
                 // Angle (0~360) * 0.002778 -> (0~1)
                 // 결론 : ceil 결과는 0 or 1. ceil을 통해 비교를 하고, _Sector를 통해 사용 여부 고른다 (전체: 1, 부분: 0 or 1)
-                // 즉, 각도 내부라면 sector가 1, 아니면 0.
+                // 즉, 각도 내부라면 sector가 1, 아니면 0. (각도 외라면 그려주지 않기 위해서)
+                // 특정 각도 범위 내에 존재하는지 체크하는 부분이다
                 half sector = lerp(1.0, 1.0 - ceil(atan2UV - _Angle*0.002777778), _Sector);
                 
                 // sector랑 비슷하지만 조금 더 큰 각도
