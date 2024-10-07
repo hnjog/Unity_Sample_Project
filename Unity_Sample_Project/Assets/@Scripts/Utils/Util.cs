@@ -64,6 +64,17 @@ public static class Util
         return (T)Enum.Parse(typeof(T), value, true);
     }
 
+    public static Color HexToColor(string color)
+    {
+        // # 안붙어있으면 붙여준다
+        if (color.Contains("#") == false)
+            color = $"#{color}";
+
+        ColorUtility.TryParseHtmlString(color, out Color parsedColor);
+
+        return parsedColor;
+    }
+
     // 영웅이면 몬스터, 몬스터면 적을 반환
     public static ECreatureType DetermineTargetType(ECreatureType ownerType, bool findAllies)
     {
