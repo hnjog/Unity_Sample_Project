@@ -6,12 +6,15 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using static Define;
 
+
 public class BaseObject : InitBase
 {
     public EObjectType ObjectType { get; protected set; } = EObjectType.None;
     public CircleCollider2D Collider { get; private set; }
     public SkeletonAnimation SkeletonAnim { get; private set; }
     public Rigidbody2D RigidBody { get; private set; }
+
+    private HurtFlashEffect HurtFlash;
 
     public float ColliderRadius { get { return Collider != null ? Collider.radius : 0.0f; } }
     public Vector3 CenterPosition { get { return transform.position + Vector3.up * ColliderRadius; } }
@@ -37,6 +40,8 @@ public class BaseObject : InitBase
         Collider = gameObject.GetOrAddComponent<CircleCollider2D>();
         SkeletonAnim = GetComponent<SkeletonAnimation>();
         RigidBody = GetComponent<Rigidbody2D>();
+
+        HurtFlash = gameObject.GetOrAddComponent<HurtFlashEffect>();
 
         return true;
     }
@@ -71,7 +76,7 @@ public class BaseObject : InitBase
     #region Battle
     public virtual void OnDamaged(BaseObject attacker, SkillBase skill)
     {
-
+        HurtFlash.Flash();
     }
 
     public virtual void OnDead(BaseObject attacker, SkillBase skill)
