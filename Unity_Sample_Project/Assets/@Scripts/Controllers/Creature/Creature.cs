@@ -18,6 +18,9 @@ public class Creature : BaseObject
     public ECreatureType CreatureType { get; protected set; } = ECreatureType.None;
 
     #region Stats
+    // int 로 만들지 float로 만들지는 보통 lead 플머가 정한다
+    // float 장점 : 편리함, 별도의 구현 제약이 없음
+    // int 장점 : 속도가 빠름 , 그러나 소수점 등을 계산하려면 int * 10000 같은 크랙 방식을 적용
     public float Hp { get; set; }
     public CreatureStat MaxHp;
     public CreatureStat Atk;
