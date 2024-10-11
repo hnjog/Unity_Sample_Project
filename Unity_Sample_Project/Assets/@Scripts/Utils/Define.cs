@@ -146,6 +146,13 @@ public static class Define
         PercentMult,
     }
 
+    public enum EEffectType
+    {
+        Buff,
+        Debuff,
+        CrowdControl,
+    }
+
     public const float EFFECT_SMALL_RADIUS = 2.5f;
     public const float EFFECT_NORMAL_RADIUS = 4.5f;
     public const float EFFECT_BIG_RADIUS = 5.5f;
