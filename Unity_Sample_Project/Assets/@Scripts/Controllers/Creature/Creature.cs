@@ -17,6 +17,8 @@ public class Creature : BaseObject
 
     public ECreatureType CreatureType { get; protected set; } = ECreatureType.None;
 
+    public EffectComponent Effects { get; set; }
+
     #region Stats
     // int 로 만들지 float로 만들지는 보통 lead 플머가 정한다
     // float 장점 : 편리함, 별도의 구현 제약이 없음
@@ -130,6 +132,10 @@ public class Creature : BaseObject
 
         // State
         CreatureState = ECreatureState.Idle;
+
+        // Effect
+        Effects = gameObject.AddComponent<EffectComponent>();
+        Effects.SetInfo(this);
 
         // Map
         StartCoroutine(CoLerpToCellPos());
@@ -277,7 +283,13 @@ public class Creature : BaseObject
         {
             OnDead(attacker, skill);
             CreatureState = ECreatureState.Dead;
+            return;
         }
+
+        // 피격 스킬에 따른 Effect 적용
+        if (skill.SkillData.EffectIds != null)
+            Effects.GenerateEffects(skill.SkillData.EffectIds.ToArray(), EEffectSpawnType.Skill);
+
     }
 
     public override void OnDead(BaseObject attacker, SkillBase skill)

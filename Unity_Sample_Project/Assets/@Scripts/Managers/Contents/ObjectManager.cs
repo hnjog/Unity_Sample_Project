@@ -13,6 +13,7 @@ public class ObjectManager
     public HashSet<Monster> Monsters { get; } = new HashSet<Monster>();
     public HashSet<Env> Envs { get; } = new HashSet<Env>();
     public HashSet<Projectile> Projectiles { get; } = new HashSet<Projectile>();
+    public HashSet<EffectBase> Effects { get; } = new HashSet<EffectBase>();
     public HeroCamp Camp { get; private set; }
 
     #region Roots
@@ -30,6 +31,7 @@ public class ObjectManager
     public Transform MonsterRoot { get { return GetRootTransform("@Monsters"); } }
     public Transform EnvRoot { get { return GetRootTransform("@Envs"); } }
     public Transform ProjectileRoot { get { return GetRootTransform("@Projectiles"); } }
+    public Transform EffectRoot { get { return GetRootTransform("@Effects"); } }
     #endregion
 
     public void ShowDamageFont(Vector2 position, float damage, Transform parent, bool isCritical = false)
@@ -37,6 +39,19 @@ public class ObjectManager
         GameObject go = Managers.Resource.Instantiate("DamageFont", pooling: true);
         DamageFont damageText = go.GetComponent<DamageFont>();
         damageText.SetInfo(position, damage, parent, isCritical);
+    }
+
+    public GameObject SpawnGameObject(Vector3 position, string prefabName)
+    {
+        GameObject go = Managers.Resource.Instantiate(prefabName, pooling: true);
+        go.transform.position = position;
+        return go;
+    }
+
+    public T Spawn<T>(Vector3Int cellPos, int templateID) where T : BaseObject
+    {
+        Vector3 spawnPos = Managers.Map.Cell2World(cellPos);
+        return Spawn<T>(spawnPos, templateID);
     }
 
     public T Spawn<T>(Vector3 position,int templateID) where T : BaseObject
