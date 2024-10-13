@@ -96,23 +96,7 @@ public class Creature : BaseObject
         RigidBody.mass = 0;
 
         // Spine
-        // 스켈레톤에 따라 프리팹을 별도로 만드는 방식도 존재
-        // 여기서는 프리팹 수를 줄이기 위해 바꿔끼는 식
-        SkeletonAnim.skeletonDataAsset = Managers.Resource.Load<SkeletonDataAsset>(CreatureData.SkeletonDataID);
-        SkeletonAnim.Initialize(true);
-
-        // Register AnimEvent
-        if (SkeletonAnim.AnimationState != null)
-        {
-            SkeletonAnim.AnimationState.Event -= OnAnimEventHandler;
-            SkeletonAnim.AnimationState.Event += OnAnimEventHandler;
-        }
-
-        // Spine SkeletonAnimation은 SpriteRenderer 를 사용하지 않고 MeshRenderer을 사용함.
-        // 그렇기떄문에 2D Sort Axis가 안먹히게 되는데 SortingGroup을 SpriteRenderer, MeshRenderer을 같이 계산하여
-        // 그릴 순서를 정해준다
-        SortingGroup sg = Util.GetOrAddComponent<SortingGroup>(gameObject);
-        sg.sortingOrder = SortingLayers.CREATURE;
+        SetSpineAnimation(CreatureData.SkeletonDataID, SortingLayers.CREATURE);
 
         // Skills
         Skills = gameObject.GetOrAddComponent<SkillComponent>();
