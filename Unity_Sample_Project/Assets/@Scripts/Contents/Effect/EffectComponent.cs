@@ -24,6 +24,8 @@ public class EffectComponent : MonoBehaviour
         // 이펙트 id 순회
         foreach (int id in effectIds)
         {
+            // 데이터 시트에 클래스 이름을 넣어
+            // 데이터 시트의 세부 구현 난이도를 낮춘다
             string className = Managers.Data.EffectDic[id].ClassName;
             Type effectType = Type.GetType(className);
 
@@ -42,6 +44,8 @@ public class EffectComponent : MonoBehaviour
             // 일종의 부모 컴포넌트
             effect.transform.parent = _owner.Effects.transform;
             effect.transform.localPosition = Vector2.zero;
+
+            // 조금 특이하게도 이쪽에서 오브젝트를 넣어준다
             Managers.Object.Effects.Add(effect);
 
             ActiveEffects.Add(effect);
