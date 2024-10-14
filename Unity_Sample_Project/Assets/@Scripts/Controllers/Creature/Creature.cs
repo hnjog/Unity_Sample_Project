@@ -172,6 +172,8 @@ public class Creature : BaseObject
                 case ECreatureState.Skill:
                     UpdateSkill();
                     break;
+                case ECreatureState.OnDamaged:
+                    break;
                 case ECreatureState.Dead:
                     UpdateDead();
                     break;
