@@ -184,6 +184,10 @@ namespace Data
     [Serializable]
     public class EffectData
     {
+        // 현재는 이렇지만 스킬 타입이 다양해 질 수록
+        // 새로운 전용 타입 변수가 늘어날 가능성이 있음
+        // ex : 부채꼴형 범위 , 유저끼리 위치를 바꾸는 스킬 등등...
+        // 그렇기에 데이터 구조 설계가 제일 어렵다
         public int DataId;
         public string Name;
         public string ClassName;
