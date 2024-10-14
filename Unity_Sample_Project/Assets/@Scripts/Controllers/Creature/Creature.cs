@@ -138,6 +138,10 @@ public class Creature : BaseObject
             case ECreatureState.Move:
                 PlayAnimation(0, AnimName.MOVE, true);
                 break;
+            case ECreatureState.OnDamaged: // CC기를 맞은 상황
+                PlayAnimation(0, AnimName.IDLE, true);
+                Skills.CurrentSkill.CancelSkill();
+                break;
             case ECreatureState.Dead:
                 PlayAnimation(0, AnimName.DEAD, true);
                 RigidBody.simulated = false;

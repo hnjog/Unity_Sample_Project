@@ -57,6 +57,7 @@ public static class Define
         Idle,
         Move,
         Skill,
+        OnDamaged,
         Dead
     }
 
