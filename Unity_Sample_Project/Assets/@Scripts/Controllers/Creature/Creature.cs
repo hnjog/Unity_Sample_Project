@@ -173,6 +173,7 @@ public class Creature : BaseObject
                     UpdateSkill();
                     break;
                 case ECreatureState.OnDamaged:
+                    UpdateOnDamaged();
                     break;
                 case ECreatureState.Dead:
                     UpdateDead();
@@ -225,6 +226,8 @@ public class Creature : BaseObject
 
         StartWait(delay);
     }
+    protected virtual void UpdateOnDamaged() { }
+
     protected virtual void UpdateDead() { }
     #endregion
 
