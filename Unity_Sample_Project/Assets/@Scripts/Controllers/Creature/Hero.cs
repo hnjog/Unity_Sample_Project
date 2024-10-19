@@ -237,11 +237,11 @@ public class Hero : Creature
             return false;
 
         // 갈수 없나?
-        if (Managers.Map.CanGo(destCellPos, ignoreObjects: true) == false)
+        if (Managers.Map.CanGo(this,destCellPos, ignoreObjects: true) == false)
             return false;
 
         // 넓게 잡아서 길 찾아본다
-        List<Vector3Int> path = Managers.Map.FindPath(CellPos, destCellPos, 100);
+        List<Vector3Int> path = Managers.Map.FindPath(this,CellPos, destCellPos, 100);
 
         // 가까이에 있네?
         if (path.Count < 2)

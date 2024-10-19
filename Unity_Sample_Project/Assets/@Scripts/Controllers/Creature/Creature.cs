@@ -19,6 +19,19 @@ public class Creature : BaseObject
 
     public EffectComponent Effects { get; set; }
 
+    float DistToTargetSqr
+    {
+        get
+        {
+            // 대상 방향
+            Vector3 dir = (Target.transform.position - transform.position);
+
+            // 여분 셀 만큼 거리를 줄어든 것으로 판정한다
+            float distToTarget = Math.Max(0, dir.magnitude - Target.ExtraCells * 1f - ExtraCells * 1f); // 임시
+            return distToTarget * distToTarget;
+        }
+    }
+
     #region Stats
     // int 로 만들지 float로 만들지는 보통 lead 플머가 정한다
     // float 장점 : 편리함, 별도의 구현 제약이 없음
@@ -206,8 +219,7 @@ public class Creature : BaseObject
         }
 
         // 캐릭터 공격거리 체크
-        Vector3 dir = (Target.CenterPosition - CenterPosition);
-        float distToTargetSqr = dir.sqrMagnitude;
+        float distToTargetSqr = DistToTargetSqr;
         float attackDistanceSqr = AttackDistance * AttackDistance;
         if (distToTargetSqr > attackDistanceSqr)
         {
@@ -327,8 +339,7 @@ public class Creature : BaseObject
 
     protected void ChaseOrAttackTarget(float chaseRange, float attackRange)
     {
-        Vector3 dir = (Target.transform.position - transform.position);
-        float distToTargetSqr = dir.sqrMagnitude;
+        float distToTargetSqr = DistToTargetSqr;
         float attackDistanceSqr = attackRange * attackRange;
 
         if (distToTargetSqr <= attackDistanceSqr)
@@ -374,7 +385,7 @@ public class Creature : BaseObject
         if (LerpCellPosCompleted == false)
             return EFindPathResult.Fail_LerpCell;
 
-        List<Vector3Int> path = Managers.Map.FindPath(CellPos, destCellPos, maxDepth);
+        List<Vector3Int> path = Managers.Map.FindPath(this, CellPos, destCellPos, maxDepth);
 
         // path 크기가 너무 작음(1이하)
         // 제대로된 길이 아님
