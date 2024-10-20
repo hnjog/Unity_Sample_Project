@@ -268,6 +268,32 @@ public class Creature : BaseObject
     #endregion
 
     #region Battle
+    public void HandleDotDamage(EffectBase effect)
+    {
+        if (effect == null)
+            return;
+        if (effect.Owner.IsValid() == false)
+            return;
+
+        // TEMP
+        float damage = (Hp * effect.EffectData.PercentAdd) + effect.EffectData.Amount;
+        if (effect.EffectData.ClassName.Contains("Heal"))
+            damage *= -1f;
+
+        float finalDamage = Mathf.Round(damage);
+        Hp = Mathf.Clamp(Hp - finalDamage, 0, MaxHp.Value);
+
+        Managers.Object.ShowDamageFont(CenterPosition, finalDamage, transform, false);
+
+        // TODO : OnDamaged 통합
+        if (Hp <= 0)
+        {
+            OnDead(effect.Owner, effect.Skill);
+            CreatureState = ECreatureState.Dead;
+            return;
+        }
+    }
+
     public override void OnDamaged(BaseObject attacker,SkillBase skill)
     {
         base.OnDamaged(attacker, skill);
