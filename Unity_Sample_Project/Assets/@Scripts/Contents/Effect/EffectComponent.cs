@@ -15,7 +15,7 @@ public class EffectComponent : MonoBehaviour
     }
 
     // 이펙트를 걸어준다
-    public List<EffectBase> GenerateEffects(IEnumerable<int> effectIds, EEffectSpawnType spawnType)
+    public List<EffectBase> GenerateEffects(IEnumerable<int> effectIds, EEffectSpawnType spawnType, SkillBase skill)
     {
         List<EffectBase> generatedEffects = new List<EffectBase>();
 
@@ -51,7 +51,7 @@ public class EffectComponent : MonoBehaviour
             ActiveEffects.Add(effect);
             generatedEffects.Add(effect);
 
-            effect.SetInfo(id, _owner, spawnType);
+            effect.SetInfo(id, _owner, spawnType,skill);
             effect.ApplyEffect(); // 이펙트가 작동되도록 재생
         }
 

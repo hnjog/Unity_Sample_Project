@@ -293,7 +293,7 @@ public class Creature : BaseObject
 
         // 피격 스킬에 따른 Effect 적용
         if (skill.SkillData.EffectIds != null)
-            Effects.GenerateEffects(skill.SkillData.EffectIds.ToArray(), EEffectSpawnType.Skill);
+            Effects.GenerateEffects(skill.SkillData.EffectIds.ToArray(), EEffectSpawnType.Skill,skill);
 
     }
 
