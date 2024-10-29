@@ -15,8 +15,6 @@ public class Creature : BaseObject
 
     public Data.CreatureData CreatureData { get; protected set; }
 
-    public ECreatureType CreatureType { get; protected set; } = ECreatureType.None;
-
     public EffectComponent Effects { get; set; }
 
     float DistToTargetSqr
@@ -83,7 +81,6 @@ public class Creature : BaseObject
         if (base.Init() == false)
             return false;
 
-        ObjectType = EObjectType.Creature;
         // 상태 변경 시, Spine 애니메이션이 변경되나
         // 현재 시점에선 SetInfo가 호출되지 않으므로 크래시가 난다
         // 따라서 SetInfo로 상태 변경을 옮김
@@ -94,7 +91,7 @@ public class Creature : BaseObject
     {
         DataTemplateID = templateID;
 
-        if(CreatureType == ECreatureType.Hero)
+        if(ObjectType == EObjectType.Hero)
             CreatureData = Managers.Data.HeroDic[templateID];
         else
             CreatureData = Managers.Data.MonsterDic[templateID];

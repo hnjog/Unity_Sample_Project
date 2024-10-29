@@ -71,8 +71,7 @@ public class MapEditor : MonoBehaviour
             CustomTile customTile = ScriptableObject.CreateInstance<CustomTile>();
             customTile.Name = data.DescriptionTextID;
             customTile.DataTemplateID = data.DataId;
-            customTile.ObjectType = Define.EObjectType.Creature;
-            customTile.CreatureType = Define.ECreatureType.Monster;
+            customTile.ObjectType = Define.EObjectType.Monster;
 
             string name = $"{data.DataId}_{data.DescriptionTextID}";
             string path = "Assets/@Resources/TileMaps/Tiles/Dev/Monster";
@@ -93,7 +92,6 @@ public class MapEditor : MonoBehaviour
             customTile.Name = data.DescriptionTextID;
             customTile.DataTemplateID = data.DataId;
             customTile.ObjectType = Define.EObjectType.Env;
-            customTile.CreatureType = Define.ECreatureType.None;
 
             string name = $"{data.DataId}_{data.DescriptionTextID}";
             string path = "Assets/@Resources/TileMaps/Tiles/Dev/Env";

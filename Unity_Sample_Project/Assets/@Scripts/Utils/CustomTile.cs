@@ -9,7 +9,6 @@ public class CustomTile : Tile
     [Space]
     [Header("For Designer")] // 해당 필드 위에 헤더를 추가
     public Define.EObjectType ObjectType;
-    public Define.ECreatureType CreatureType;
     public int DataTemplateID;
     public string Name;
 }

@@ -51,7 +51,7 @@ public class Hero : Creature
         if (base.Init() == false)
             return false;
 
-        CreatureType = ECreatureType.Hero;
+        ObjectType = EObjectType.Hero;
 
         // Game의 이벤트 구독하기 위함
         // + 만 해도 되지만, 혹시나 2번 호출하는 경우를 대비하여 미리 한번 빼준다

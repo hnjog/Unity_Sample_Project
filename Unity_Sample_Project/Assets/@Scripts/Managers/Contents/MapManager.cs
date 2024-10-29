@@ -111,37 +111,7 @@ public class MapManager
         if (tm != null)
             tm.gameObject.SetActive(false);
 
-        // 한칸 한칸 검사
-        for (int y = tm.cellBounds.yMax; y >= tm.cellBounds.yMin; y--)
-        {
-            for (int x = tm.cellBounds.xMin; x <= tm.cellBounds.xMax; x++)
-            {
-                Vector3Int cellPos = new Vector3Int(x, y, 0);
-                CustomTile tile = tm.GetTile(cellPos) as CustomTile;
-                if (tile == null)
-                    continue;
-
-                if (tile.ObjectType == Define.EObjectType.Env)
-                {
-                    Vector3 worldPos = Cell2World(cellPos);
-                    Env env = Managers.Object.Spawn<Env>(worldPos, tile.DataTemplateID);
-                    env.SetCellPos(cellPos, true);
-                }
-                else
-                {
-                    if (tile.CreatureType == Define.ECreatureType.Monster)
-                    {
-                        Vector3 worldPos = Cell2World(cellPos);
-                        Monster monster = Managers.Object.Spawn<Monster>(worldPos, tile.DataTemplateID);
-                        monster.SetCellPos(cellPos, true);
-                    }
-                    else if (tile.CreatureType == Define.ECreatureType.Npc)
-                    {
-                        // To do
-                    }
-                }
-            }
-        }
+        
     }
 
     public bool MoveTo(Creature obj, Vector3Int cellPos, bool forceMove = false)

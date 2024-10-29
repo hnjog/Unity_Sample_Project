@@ -41,7 +41,7 @@ public class Monster : Creature
         if (base.Init() == false)
             return false;
 
-        CreatureType = ECreatureType.Monster;
+        ObjectType = EObjectType.Monster;
 
         // AI 작동하도록 코루틴 실행
         StartCoroutine(CoUpdateAI());
