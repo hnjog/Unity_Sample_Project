@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Define;
 
@@ -161,8 +163,8 @@ public class ObjectManager
     #region Skill 판정
     public List<Creature> FindConeRangeTargets(Creature owner, Vector3 dir, float range, int angleRange, bool isAllies = false)
     {
-        List<Creature> targets = new List<Creature>();
-        List<Creature> ret = new List<Creature>();
+        HashSet<Creature> targets = new HashSet<Creature>();
+        HashSet<Creature> ret = new HashSet<Creature>();
 
         ECreatureType targetType = Util.DetermineTargetType(owner.CreatureType, isAllies);
 
@@ -190,8 +192,6 @@ public class ObjectManager
             // 2. 각도 확인
             if (angleRange != 360)
             {
-                BaseObject ownerTarget = (owner as Creature).Target;
-
                 // 2. 부채꼴 모양 각도 계산
                 // 내적을 통해서
                 // 사용자가 타겟을 바라보는 방향과, 현재 dir(시전자가 주시하는 방향)을 내적하여
@@ -211,8 +211,39 @@ public class ObjectManager
             ret.Add(target);
         }
 
-        return ret;
+        return ret.ToList();
     }
 
+    // 위 코드에서 거리만 확인하면 된다
+    public List<Creature> FindCircleRangeTargets(Creature owner, Vector3 startPos, float range, bool isAllies = false)
+    {
+        HashSet<Creature> targets = new HashSet<Creature>();
+        HashSet<Creature> ret = new HashSet<Creature>();
+
+        ECreatureType targetType = Util.DetermineTargetType(owner.CreatureType, isAllies);
+
+        if (targetType == ECreatureType.Monster)
+        {
+            var objs = Managers.Map.GatherObjects<Monster>(owner.transform.position, range, range);
+            targets.AddRange(objs);
+        }
+        else if (targetType == ECreatureType.Hero)
+        {
+            var objs = Managers.Map.GatherObjects<Hero>(owner.transform.position, range, range);
+            targets.AddRange(objs);
+        }
+
+        foreach (var target in targets)
+        {
+            // 1. 거리안에 있는지 확인
+            var targetPos = target.transform.position;
+            float distSqr = (targetPos - startPos).sqrMagnitude;
+
+            if (distSqr < range * range)
+                ret.Add(target);
+        }
+
+        return ret.ToList();
+    }
     #endregion
 }
