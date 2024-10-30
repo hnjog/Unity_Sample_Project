@@ -70,7 +70,7 @@ public class MapEditor : MonoBehaviour
             // (에셋 저장도 가능)
             CustomTile customTile = ScriptableObject.CreateInstance<CustomTile>();
             customTile.Name = data.DescriptionTextID;
-            customTile.DataTemplateID = data.DataId;
+            customTile.DataId = data.DataId;
             customTile.ObjectType = Define.EObjectType.Monster;
 
             string name = $"{data.DataId}_{data.DescriptionTextID}";
@@ -90,7 +90,7 @@ public class MapEditor : MonoBehaviour
 
             CustomTile customTile = ScriptableObject.CreateInstance<CustomTile>();
             customTile.Name = data.DescriptionTextID;
-            customTile.DataTemplateID = data.DataId;
+            customTile.DataId = data.DataId;
             customTile.ObjectType = Define.EObjectType.Env;
 
             string name = $"{data.DataId}_{data.DescriptionTextID}";
