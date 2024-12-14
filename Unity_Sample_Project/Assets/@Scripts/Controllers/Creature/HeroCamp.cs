@@ -45,6 +45,9 @@ public class HeroCamp : BaseObject
             return;
 
         transform.position = newPos;
+
+        // 맵 변경
+        Managers.Map.StageTransition.CheckMapChanged(newPos);
     }
 
     private void HandleOnMoveDirChanged(Vector2 dir)

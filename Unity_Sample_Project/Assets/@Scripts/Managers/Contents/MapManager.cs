@@ -23,6 +23,8 @@ public class MapManager
     // 여러 개의 오브젝트를 넣을 생각이라면, 별도의 클래스를 파는 것이 좋을 수 있다
     Dictionary<Vector3Int, BaseObject> _cells = new Dictionary<Vector3Int, BaseObject>();
 
+    public StageTransition StageTransition;
+
     // 현재 맵에 대한 정보 (좌표)
     private int MinX;
     private int MaxX;
@@ -41,6 +43,8 @@ public class MapManager
         GameObject map = Managers.Resource.Instantiate(mapName);
         map.transform.position = Vector3.zero;
         map.name = $"@Map_{mapName}";
+
+        StageTransition = map.GetComponent<StageTransition>();
 
         Map = map;
         MapName = mapName;

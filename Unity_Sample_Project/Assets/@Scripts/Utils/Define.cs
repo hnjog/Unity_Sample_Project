@@ -202,6 +202,7 @@ public static class Define
     // 외부 Data 시트에서 정의한 ID (임시)
     public const int HERO_WIZARD_ID = 201000;
     public const int HERO_KNIGHT_ID = 201001;
+    public const int HERO_LION_ID = 201003;
 
     public const int MONSTER_SLIME_ID = 202001;
     public const int MONSTER_SPIDER_COMMON_ID = 202002;

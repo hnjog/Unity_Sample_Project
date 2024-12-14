@@ -5,6 +5,9 @@ using static Define;
 
 public struct ObjectSpawnInfo
 {
+    // 스테이지 정보를 저장시켜
+    // 메모리 절약 (일일이 게임 오브젝트를 켜놓기 보다는)
+    // 현재 상황을 저장하고, 메모리 off 하기 위함
 	public ObjectSpawnInfo(string name, int dataId, int x, int y, Vector3 worldPos, EObjectType type)
 	{
 		Name = name;
@@ -25,8 +28,8 @@ public struct ObjectSpawnInfo
 public class Stage : MonoBehaviour
 {
     [SerializeField]
-    private List<BaseObject> _spawnObjects = new List<BaseObject>();
-    private List<ObjectSpawnInfo> _spawnInfos = new List<ObjectSpawnInfo>();
+    private List<BaseObject> _spawnObjects = new List<BaseObject>(); // 스폰한 오브젝트
+    private List<ObjectSpawnInfo> _spawnInfos = new List<ObjectSpawnInfo>(); // 스폰한 정보
 
     private ObjectSpawnInfo _startSpawnInfo;
     public ObjectSpawnInfo StartSpawnInfo
@@ -66,8 +69,8 @@ public class Stage : MonoBehaviour
 
     public void LoadStage()
     {
-        if (IsActive)
-            return;
+        //if (IsActive)
+        //    return;
 
         IsActive = true;
         gameObject.SetActive(true);
@@ -76,8 +79,8 @@ public class Stage : MonoBehaviour
 
     public void UnLoadStage()
     {
-        if (IsActive == false)
-            return;
+        //if (IsActive == false)
+        //    return;
 
         IsActive = false;
         gameObject.SetActive(false);
