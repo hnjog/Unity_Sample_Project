@@ -47,12 +47,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 894df532750051b43a5df0b583b6c101
-    m_Address: BaseMapCollision
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8569ba94ff9356d4c8718f45cae0d919
     m_Address: EffectData
     m_ReadOnly: 0
@@ -67,6 +61,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: aea83389c111fbc43b3afcd8e9625340
     m_Address: NpcData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 894df532750051b43a5df0b583b6c101
+    m_Address: BaseMapCollision
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
