@@ -109,6 +109,11 @@ public class Stage : MonoBehaviour
                     env.SetCellPos(cellPos, true);
                     _spawnObjects.Add(env);
                     break;
+                case EObjectType.Npc:
+                    Npc npc = Managers.Object.Spawn<Npc>(worldPos, info.DataId);
+                    npc.SetCellPos(cellPos, true);
+                    _spawnObjects.Add(npc);
+                    break;
             }
         }
     }
@@ -124,6 +129,9 @@ public class Stage : MonoBehaviour
                     break;
                 case EObjectType.Env:
                     Managers.Object.Despawn(obj as Env);
+                    break;
+                case EObjectType.Npc:
+                    Managers.Object.Despawn(obj as Npc);
                     break;
             }
         }
