@@ -21,6 +21,7 @@ public class DataManager
     public Dictionary<int, Data.EnvData> EnvDic { get; private set; }
     public Dictionary<int, Data.EffectData> EffectDic { get; private set; }
     public Dictionary<int, Data.AoEData> AoEDic { get; private set; }
+    public Dictionary<int, Data.NpcData> NpcDic { get; private set; }
 
     public void Init()
     {
@@ -31,6 +32,7 @@ public class DataManager
         EnvDic = LoadJson<Data.EnvDataLoader, int, Data.EnvData>("EnvData").MakeDict();
         EffectDic = LoadJson<Data.EffectDataLoader, int, Data.EffectData>("EffectData").MakeDict();
         AoEDic = LoadJson<Data.AoEDataLoader, int, Data.AoEData>("AoEData").MakeDict();
+        NpcDic = LoadJson<Data.NpcDataLoader, int, Data.NpcData>("NpcData").MakeDict();
     }
 
     private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
