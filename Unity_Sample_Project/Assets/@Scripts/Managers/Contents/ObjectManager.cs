@@ -14,6 +14,7 @@ public class ObjectManager
     public HashSet<Hero> Heroes { get; } = new HashSet<Hero>();
     public HashSet<Monster> Monsters { get; } = new HashSet<Monster>();
     public HashSet<Env> Envs { get; } = new HashSet<Env>();
+    public HashSet<Npc> Npcs { get; } = new HashSet<Npc>();
     public HashSet<Projectile> Projectiles { get; } = new HashSet<Projectile>();
     public HashSet<EffectBase> Effects { get; } = new HashSet<EffectBase>();
     public HeroCamp Camp { get; private set; }
@@ -32,6 +33,7 @@ public class ObjectManager
     public Transform HeroRoot { get { return GetRootTransform("@Heroes"); } }
     public Transform MonsterRoot { get { return GetRootTransform("@Monsters"); } }
     public Transform EnvRoot { get { return GetRootTransform("@Envs"); } }
+    public Transform NpcRoot { get { return GetRootTransform("@Npcs"); } }
     public Transform ProjectileRoot { get { return GetRootTransform("@Projectiles"); } }
     public Transform EffectRoot { get { return GetRootTransform("@Effects"); } }
     #endregion
@@ -106,6 +108,15 @@ public class ObjectManager
         else if (obj.ObjectType == EObjectType.HeroCamp)
         {
             Camp = go.GetComponent<HeroCamp>();
+        }
+        else if(obj.ObjectType == EObjectType.Npc)
+        {
+            obj.transform.parent = NpcRoot;
+
+            Npc npc = go.GetComponent<Npc>();
+            Npcs.Add(npc);
+
+            npc.SetInfo(templateID);
         }
 
         return obj as T;

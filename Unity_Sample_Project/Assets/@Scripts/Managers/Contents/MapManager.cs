@@ -51,8 +51,6 @@ public class MapManager
         CellGrid = map.GetComponent<Grid>();
 
         ParseCollisionData(map, mapName);
-
-        SpawnObjectsByData(map, mapName);
     }
 
     // 다른 맵 이동 시, 현재 데이터를 지우는 용도
@@ -105,17 +103,6 @@ public class MapManager
                 }
             }
         }
-    }
-
-    void SpawnObjectsByData(GameObject map, string mapName, string tilemap = "Tilemap_Object")
-    {
-        Tilemap tm = Util.FindChild<Tilemap>(map, tilemap, true);
-
-        // 일단 꺼두기
-        if (tm != null)
-            tm.gameObject.SetActive(false);
-
-        
     }
 
     public bool MoveTo(Creature obj, Vector3Int cellPos, bool forceMove = false)
