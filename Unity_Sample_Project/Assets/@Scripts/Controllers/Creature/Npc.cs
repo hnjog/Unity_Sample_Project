@@ -10,6 +10,7 @@ public class Npc : BaseObject
     public NpcData Data { get; set; }
 
     private SkeletonAnimation _skeletonAnim;
+    private UI_NpcInteraction _ui;
 
     public override bool Init()
     {
@@ -30,5 +31,9 @@ public class Npc : BaseObject
         PlayAnimation(0, AnimName.IDLE, true);
         #endregion
 
+        GameObject button = Managers.Resource.Instantiate("UI_NpcInteraction", gameObject.transform);
+        button.transform.localPosition = new Vector3(0f, 3f);
+        _ui = button.GetComponent<UI_NpcInteraction>();
+        _ui.SetInfo(DataTemplateID, this);
     }
 }
