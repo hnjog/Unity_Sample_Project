@@ -50,6 +50,8 @@ public class UI_WaypointPopup : UI_Popup
 
         foreach (var stage in Managers.Map.StageTransition.Stages)
         {
+            // 동적 생성
+            // 실제로는 최대개수를 미리 만들어 두는 편이 더 효율적
             UI_StageItem item = Managers.UI.MakeSubItem<UI_StageItem>(parent.transform);
 
             item.SetInfo(stage, () =>

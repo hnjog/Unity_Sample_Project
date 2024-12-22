@@ -47,8 +47,8 @@ public class UI_StageItem : UI_Base
     {
         Debug.Log("OnClickStageItem");
 
-		//Managers.Map.StageTransition.OnMapChanged(_owner.StageIndex);
-		//Managers.Game.TeleportHeroes(_owner.WaypointSpawnInfo.CellPos);
+		Managers.Map.StageTransition.OnMapChanged(_owner.StageIndex);
+		Managers.Game.TeleportHeroes(_owner.WaypointSpawnInfo.CellPos);
 
 		OnCloseItem?.Invoke();
     }
