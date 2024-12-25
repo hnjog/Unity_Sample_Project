@@ -60,12 +60,10 @@ public class UI_WaypointPopup : UI_Popup
         if (Managers.Map.StageTransition == null)
             return;
 
-        _items.Clear();
-
 		GameObject parent = GetObject((int)GameObjects.WaypointList);
         List<Stage> stages = Managers.Map.StageTransition.Stages;
 
-        for (int i = 0; i < MAX_ITEM_COUNT; i++)
+        for (int i = 0; i < _items.Count; i++)
         {
             if (i < stages.Count)
             {
