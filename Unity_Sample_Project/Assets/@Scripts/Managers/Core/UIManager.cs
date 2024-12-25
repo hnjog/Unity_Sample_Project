@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -30,6 +31,22 @@ public class UIManager
                 root = new GameObject { name = "@UI_Root" };
             return root;
         }
+    }
+
+    public void CacheAllPopups()
+    {
+        // 리플렉션을 통한 UI_Popup 타입을 가진 클래스를 list로 받는다
+        // 그냥 ShowPopupUI<> 를 일일이 호출하는 것도 하나의 방식이긴 하다
+        var list = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(assembly => assembly.GetTypes())
+            .Where(type => type.IsSubclassOf(typeof(UI_Popup)));
+
+        foreach (Type type in list)
+        {
+            CachePopupUI(type);
+        }
+
+        CloseAllPopupUI();
     }
 
     public void SetCanvas(GameObject go, bool sort = true, int sortOrder = 0)
@@ -122,6 +139,19 @@ public class UIManager
         return sceneUI;
     }
 
+    public void CachePopupUI(Type type)
+    {
+        string name = type.Name;
+
+        if (_popups.TryGetValue(name, out UI_Popup popup) == false)
+        {
+            GameObject go = Managers.Resource.Instantiate(name);
+            popup = go.GetComponent<UI_Popup>();
+            _popups[name] = popup;
+        }
+
+        _popupStack.Push(popup);
+    }
     public T ShowPopupUI<T>(string name = null) where T : UI_Popup
     {
         if (string.IsNullOrEmpty(name))
