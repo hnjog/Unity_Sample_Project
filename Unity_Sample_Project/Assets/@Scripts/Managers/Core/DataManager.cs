@@ -15,6 +15,7 @@ public class DataManager
 {
     // 필드 겸 프로퍼티 (변수와 속성) 역할을 겸함
     public Dictionary<int, Data.HeroData> HeroDic { get; private set; }
+    public Dictionary<int, Data.HeroInfoData> HeroInfoDic { get; private set; }
     public Dictionary<int, Data.MonsterData> MonsterDic { get; private set; }
     public Dictionary<int, Data.SkillData> SkillDic { get; private set; }
     public Dictionary<int, Data.ProjectileData> ProjectileDic { get; private set; }
@@ -22,10 +23,12 @@ public class DataManager
     public Dictionary<int, Data.EffectData> EffectDic { get; private set; }
     public Dictionary<int, Data.AoEData> AoEDic { get; private set; }
     public Dictionary<int, Data.NpcData> NpcDic { get; private set; }
+    public Dictionary<string, Data.TextData> TextDic { get; private set; } = new Dictionary<string, Data.TextData>();
 
     public void Init()
     {
         HeroDic = LoadJson<Data.HeroDataLoader, int, Data.HeroData>("HeroData").MakeDict();
+        HeroInfoDic = LoadJson<Data.HeroInfoDataLoader, int, Data.HeroInfoData>("HeroInfoData").MakeDict();
         MonsterDic = LoadJson<Data.MonsterDataLoader, int, Data.MonsterData>("MonsterData").MakeDict();
         SkillDic = LoadJson<Data.SkillDataLoader, int, Data.SkillData>("SkillData").MakeDict();
         ProjectileDic = LoadJson<Data.ProjectileDataLoader, int, Data.ProjectileData>("ProjectileData").MakeDict();
@@ -33,6 +36,7 @@ public class DataManager
         EffectDic = LoadJson<Data.EffectDataLoader, int, Data.EffectData>("EffectData").MakeDict();
         AoEDic = LoadJson<Data.AoEDataLoader, int, Data.AoEData>("AoEData").MakeDict();
         NpcDic = LoadJson<Data.NpcDataLoader, int, Data.NpcData>("NpcData").MakeDict();
+        TextDic = LoadJson<Data.TextDataLoader, string, Data.TextData>("TextData").MakeDict();
     }
 
     private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>

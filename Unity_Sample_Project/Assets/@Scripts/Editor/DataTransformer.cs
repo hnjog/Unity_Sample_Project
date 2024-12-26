@@ -20,6 +20,7 @@ public class DataTransformer : EditorWindow
         // 툴 작동시
         // Ctrl + Shift + k
         ParseExcelDataToJson<HeroDataLoader, HeroData>("Hero");
+        ParseExcelDataToJson<HeroInfoDataLoader, HeroInfoData>("HeroInfo");
         ParseExcelDataToJson<MonsterDataLoader, MonsterData>("Monster");
         ParseExcelDataToJson<EnvDataLoader, EnvData>("Env");
         ParseExcelDataToJson<SkillDataLoader, SkillData>("Skill");
@@ -27,6 +28,7 @@ public class DataTransformer : EditorWindow
         ParseExcelDataToJson<EffectDataLoader, EffectData>("Effect");
         ParseExcelDataToJson<AoEDataLoader, AoEData>("AoE");
         ParseExcelDataToJson<NpcDataLoader, NpcData>("Npc");
+        ParseExcelDataToJson<TextDataLoader, TextData>("Text");
 
         Debug.Log("DataTransformer Completed");
     }
