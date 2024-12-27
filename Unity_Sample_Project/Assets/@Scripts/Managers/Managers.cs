@@ -39,7 +39,6 @@ public class Managers : MonoBehaviour
     public static UIManager UI { get {  return Instance?._ui; } }
     #endregion
 
-
     #region Language
     private static Define.ELanguage _language = Define.ELanguage.Korean;
     public static Define.ELanguage Language

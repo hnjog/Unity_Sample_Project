@@ -4,6 +4,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+// 직렬화 가능 : 데이터를 특정한 형식으로 변환하여 저장하거나 전송 가능하도록 설정
+// C/C++에서 메모리의 비트를 '어떻게' 읽을 수 있냐와 관련된 개념이자
+// 역직렬화를 통하여 원래 데이터를 읽어오는 방식
+[Serializable]
+public class GameSaveData
+{
+    // 자원
+    public int Wood = 0;
+    public int Mineral = 0;
+    public int Meat = 0;
+    public int Gold = 0;
+
+    // 영웅정보
+    public List<HeroSaveData> Heroes = new List<HeroSaveData>();
+}
+
+[Serializable]
+public class HeroSaveData
+{
+    // 데이터 상 영웅의 데이터
+    public int DataId = 0;
+    public int Level = 1;
+    public int Exp = 0;
+    // 보유 여부
+    public HeroOwningState OwningState = HeroOwningState.Unowned;
+}
+
+public enum HeroOwningState
+{
+    Unowned, // 없음
+    Owned,   // 가짐
+    Picked,  // 선택해서 사용 중
+}
+
 public class GameManager
 {
     #region Hero
@@ -77,4 +111,6 @@ public class GameManager
     public event Action<Vector2> OnMoveDirChanged;
     public event Action<Define.EJoystickState> OnJoystickStateChanged;
     #endregion
+
+
 }
