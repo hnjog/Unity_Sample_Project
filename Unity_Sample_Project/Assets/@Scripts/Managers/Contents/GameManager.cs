@@ -1,12 +1,16 @@
+using Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 // 직렬화 가능 : 데이터를 특정한 형식으로 변환하여 저장하거나 전송 가능하도록 설정
 // C/C++에서 메모리의 비트를 '어떻게' 읽을 수 있냐와 관련된 개념이자
 // 역직렬화를 통하여 원래 데이터를 읽어오는 방식
+
 [Serializable]
 public class GameSaveData
 {
@@ -19,6 +23,10 @@ public class GameSaveData
     // 영웅정보
     public List<HeroSaveData> Heroes = new List<HeroSaveData>();
 }
+
+// 데이터를 저장할 때,
+// 스킬 데이터 같은 것은 '가변적'이기에 해당 데이터에 넣어주기 보단
+// 차후 만들어질 hero 객체에서 skill 데이터와 조합시키는 것이 더 유연하게 설계할 수 있음
 
 [Serializable]
 public class HeroSaveData
@@ -40,6 +48,59 @@ public enum HeroOwningState
 
 public class GameManager
 {
+    #region GameData
+    GameSaveData _saveData = new GameSaveData();
+    public GameSaveData SaveData { get { return _saveData; } set { _saveData = value; } }
+
+    public int Wood
+    {
+        get { return _saveData.Wood; }
+        private set
+        {
+            _saveData.Wood = value;
+            //(Managers.UI.SceneUI as UI_GameScene)?.RefreshWoodText();
+        }
+    }
+
+    public int Mineral
+    {
+        get { return _saveData.Mineral; }
+        private set
+        {
+            _saveData.Mineral = value;
+            //(Managers.UI.SceneUI as UI_GameScene)?.RefreshMineralText();
+        }
+    }
+
+    public int Meat
+    {
+        get { return _saveData.Meat; }
+        private set
+        {
+            _saveData.Meat = value;
+            //(Managers.UI.SceneUI as UI_GameScene)?.RefreshMeatText();
+        }
+    }
+
+    public int Gold
+    {
+        get { return _saveData.Gold; }
+        private set
+        {
+            _saveData.Gold = value;
+            //(Managers.UI.SceneUI as UI_GameScene)?.RefreshGoldText();
+        }
+    }
+
+    public List<HeroSaveData> AllHeroes { get { return _saveData.Heroes; } }
+    public int TotalHeroCount { get { return _saveData.Heroes.Count; } }
+    // LINQ, 매 프레임 사용할 것은 아니기에 사용
+    public int UnownedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == HeroOwningState.Unowned).Count(); } }
+    public int OwnedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == HeroOwningState.Owned).Count(); } }
+    public int PickedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == HeroOwningState.Picked).Count(); } }
+
+    #endregion
+
     #region Hero
     // player 뿐 아니라 npc 포함하여 이동시킬 예정이기에
     private Vector2 _moveDir;
@@ -105,12 +166,57 @@ public class GameManager
     }
     #endregion
 
+    #region Save & Load	
+    public string Path { get { return Application.persistentDataPath + "/SaveData.json"; } }
+
+    public void InitGame()
+    {
+        if (File.Exists(Path))
+            return;
+
+        var heroes = Managers.Data.HeroDic.Values.ToList();
+        foreach (HeroData hero in heroes)
+        {
+            HeroSaveData saveData = new HeroSaveData()
+            {
+                DataId = hero.DataId,
+            };
+
+            SaveData.Heroes.Add(saveData);
+        }
+
+        // TEMP
+        SaveData.Heroes[0].OwningState = HeroOwningState.Picked;
+        SaveData.Heroes[1].OwningState = HeroOwningState.Owned;
+    }
+
+    public void SaveGame()
+    {
+        string jsonStr = JsonUtility.ToJson(Managers.Game.SaveData);
+        File.WriteAllText(Path, jsonStr);
+        Debug.Log($"Save Game Completed : {Path}");
+    }
+
+    public bool LoadGame()
+    {
+        if (File.Exists(Path) == false)
+            return false;
+
+        string fileStr = File.ReadAllText(Path);
+        GameSaveData data = JsonUtility.FromJson<GameSaveData>(fileStr);
+
+        if (data != null)
+            Managers.Game.SaveData = data;
+
+        Debug.Log($"Save Game Loaded : {Path}");
+        return true;
+    }
+    #endregion
+
     #region Action
     // Delegate - 나중에 이동시킬때 한번에 이동시키도록!
     // Hero + Npc (구독자)
     public event Action<Vector2> OnMoveDirChanged;
     public event Action<Define.EJoystickState> OnJoystickStateChanged;
     #endregion
-
-
 }
