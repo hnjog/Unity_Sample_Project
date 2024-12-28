@@ -57,6 +57,14 @@ public class UI_TitleScene : UI_Scene
             {
                 Managers.Data.Init();
 
+                // 데이터 존재 확인
+                if(Managers.Game.LoadGame() == false)
+                {
+                    // 데이터가 없다면 초기화하고 먼저 저장한다
+                    Managers.Game.InitGame();
+                    Managers.Game.SaveGame();
+                }
+
                 // 시작 준비
                 GetObject((int)GameObjects.StartImage).gameObject.SetActive(true);
                 GetText((int)Texts.DisplayText).text = "Touch To Start";

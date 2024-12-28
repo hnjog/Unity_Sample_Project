@@ -171,6 +171,9 @@ public class GameManager
 
     public void InitGame()
     {
+        // 신규 캐릭터 업데이트 등을 하면
+        // 기존 데이터와 신규 데이터가 다르므로 
+        // 패치 버전 등등을 고려하는 것이 좋을 수 있음
         if (File.Exists(Path))
             return;
 
