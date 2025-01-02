@@ -111,8 +111,8 @@ public class UI_GameScene : UI_Scene
     void OnClickHeroesListButton(PointerEventData evt)
     {
 		Debug.Log("OnClickHeroesListButton");
-		//UI_HeroesListPopup popup = Managers.UI.ShowPopupUI<UI_HeroesListPopup>();
-        //popup.SetInfo();
+		UI_HeroesListPopup popup = Managers.UI.ShowPopupUI<UI_HeroesListPopup>();
+        popup.SetInfo();
 	}
 
     void OnClickSetHeroesButton(PointerEventData evt)
