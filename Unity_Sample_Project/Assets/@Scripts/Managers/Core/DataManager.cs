@@ -25,6 +25,11 @@ public class DataManager
     public Dictionary<int, Data.NpcData> NpcDic { get; private set; }
     public Dictionary<string, Data.TextData> TextDic { get; private set; } = new Dictionary<string, Data.TextData>();
 
+    public Dictionary<int, Data.EquipmentData> EquipmentDic { get; private set; } = new Dictionary<int, Data.EquipmentData>();
+    public Dictionary<int, Data.ConsumableData> ConsumableDic { get; private set; } = new Dictionary<int, Data.ConsumableData>();
+    public Dictionary<int, Data.ItemData> ItemDic { get; private set; } = new Dictionary<int, Data.ItemData>();
+
+
     public void Init()
     {
         HeroDic = LoadJson<Data.HeroDataLoader, int, Data.HeroData>("HeroData").MakeDict();
@@ -37,6 +42,14 @@ public class DataManager
         AoEDic = LoadJson<Data.AoEDataLoader, int, Data.AoEData>("AoEData").MakeDict();
         NpcDic = LoadJson<Data.NpcDataLoader, int, Data.NpcData>("NpcData").MakeDict();
         TextDic = LoadJson<Data.TextDataLoader, string, Data.TextData>("TextData").MakeDict();
+        EquipmentDic = LoadJson<Data.ItemDataLoader<Data.EquipmentData>, int, Data.EquipmentData>("Item_EquipmentData").MakeDict();
+        ConsumableDic = LoadJson<Data.ItemDataLoader<Data.ConsumableData>, int, Data.ConsumableData>("Item_ConsumableData").MakeDict();
+
+        foreach (var item in EquipmentDic)
+            ItemDic.Add(item.Key, item.Value);
+
+        foreach (var item in ConsumableDic)
+            ItemDic.Add(item.Key, item.Value);
     }
 
     private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
