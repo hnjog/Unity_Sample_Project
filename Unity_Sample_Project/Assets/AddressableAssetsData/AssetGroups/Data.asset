@@ -17,20 +17,8 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 77159042d7b7f8244bcbce51bd186b3d
   m_SerializeEntries:
-  - m_GUID: e2e63878e3d910343881c7805e510c21
-    m_Address: EnvData
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a5ac3402b71e5174aa02ef1d1f70fccb
-    m_Address: MonsterData
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fcd8925a3f926884fa8e3a8fa577e233
-    m_Address: HeroData
+  - m_GUID: 8569ba94ff9356d4c8718f45cae0d919
+    m_Address: EffectData
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
@@ -41,14 +29,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 372c8f8d647fe9e4c87c42acd090aa38
-    m_Address: ProjectileData
+  - m_GUID: e2e63878e3d910343881c7805e510c21
+    m_Address: EnvData
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8569ba94ff9356d4c8718f45cae0d919
-    m_Address: EffectData
+  - m_GUID: fcd8925a3f926884fa8e3a8fa577e233
+    m_Address: HeroData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1cdf736402f746a4492015ea4bae879f
+    m_Address: TextData
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
@@ -65,14 +59,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 372c8f8d647fe9e4c87c42acd090aa38
+    m_Address: ProjectileData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 894df532750051b43a5df0b583b6c101
     m_Address: BaseMapCollision
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1cdf736402f746a4492015ea4bae879f
-    m_Address: TextData
+  - m_GUID: a5ac3402b71e5174aa02ef1d1f70fccb
+    m_Address: MonsterData
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
