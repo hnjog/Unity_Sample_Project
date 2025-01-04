@@ -9,6 +9,7 @@ using System;
 using System.Reflection;
 using System.Collections;
 using System.ComponentModel;
+using Unity.VisualScripting;
 
 // Editor 폴더를 만들어 그 안에 스크립트가 생성되어 C# 에디터라는 프로젝트로 분리됨
 public class DataTransformer : EditorWindow
@@ -93,6 +94,9 @@ public class DataTransformer : EditorWindow
                 // 미리 가져온 이름으로 가져온다
                 FieldInfo field = loaderData.GetType().GetField(fields[f].Name);
                 Type type = field.FieldType;
+
+                if (field.HasAttribute(typeof(NonSerializedAttribute)))
+                    continue;
 
                 // 제네릭 타입이라면 ConvertList 호출하여 변환
                 if (type.IsGenericType)

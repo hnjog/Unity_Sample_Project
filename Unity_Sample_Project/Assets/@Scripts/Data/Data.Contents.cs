@@ -45,6 +45,12 @@ namespace Data
     {
         public int DropItemId;
         // scriptable Object를 통해 에디터에서 수정할 수 있는점은 고려할 법하다
+
+        // 몬스터 데이터에서 DropTableData를 가지고 있도록 처리하기 위함
+        // 그리고 DataTransformer에서 해당 부분은 파싱하지 않도록 처리
+        // (괜히 엑셀에서 데이터 찾지 말고 건너띄도록)
+        [NonSerialized]
+        public DropTableData DropTable;
     }
 
     [Serializable]
@@ -385,7 +391,7 @@ namespace Data
     }
 
     [Serializable]
-    public class DropTableData_Internal
+    public class DropTableData_Internal // 이걸 받아 dropTableData 내부에 꽃아준다
     {
         public int DataId; // 드랍 테이블 id (아니면 monster id 와 통합시키는 방식도 존재하긴 함)
         public int RewardExp;
