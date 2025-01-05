@@ -46,6 +46,8 @@ public class DataManager
         ConsumableDic = LoadJson<Data.ItemDataLoader<Data.ConsumableData>, int, Data.ConsumableData>("Item_ConsumableData").MakeDict();
         DropTableDic = LoadJson<Data.DropTableDataLoader, int, Data.DropTableData>("DropTableData").MakeDict();
 
+        ItemDic.Clear();
+
         foreach (var item in EquipmentDic)
             ItemDic.Add(item.Key, item.Value);
 
