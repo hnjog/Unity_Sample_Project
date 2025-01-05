@@ -17,6 +17,7 @@ public class ObjectManager
     public HashSet<Npc> Npcs { get; } = new HashSet<Npc>();
     public HashSet<Projectile> Projectiles { get; } = new HashSet<Projectile>();
     public HashSet<EffectBase> Effects { get; } = new HashSet<EffectBase>();
+    public HashSet<ItemHolder> ItemHolders { get; } = new HashSet<ItemHolder>();
     public HeroCamp Camp { get; private set; }
 
     #region Roots
@@ -36,6 +37,7 @@ public class ObjectManager
     public Transform NpcRoot { get { return GetRootTransform("@Npcs"); } }
     public Transform ProjectileRoot { get { return GetRootTransform("@Projectiles"); } }
     public Transform EffectRoot { get { return GetRootTransform("@Effects"); } }
+    public Transform ItemHolderRoot { get { return GetRootTransform("@ItemHolders"); } }
     #endregion
 
     public void ShowDamageFont(Vector2 position, float damage, Transform parent, bool isCritical = false)
@@ -118,6 +120,13 @@ public class ObjectManager
 
             npc.SetInfo(templateID);
         }
+        else if(obj.ObjectType == EObjectType.ItemHolder)
+        {
+            obj.transform.parent = ItemHolderRoot;
+
+            ItemHolder itemHolder = go.GetOrAddComponent<ItemHolder>();
+            ItemHolders.Add(itemHolder);
+        }
 
         return obj as T;
     }
@@ -154,6 +163,11 @@ public class ObjectManager
         else if (obj.ObjectType == EObjectType.HeroCamp)
         {
             Camp = null;
+        }
+        else if (obj.ObjectType == EObjectType.ItemHolder)
+        {
+            ItemHolder itemHolder = obj as ItemHolder;
+            ItemHolders.Remove(itemHolder);
         }
 
         Managers.Resource.Destroy(obj.gameObject);
