@@ -22,6 +22,11 @@ public class GameSaveData
 
     // 영웅정보
     public List<HeroSaveData> Heroes = new List<HeroSaveData>();
+
+    // 솔로 플레이용 Id
+    public int ItemDbIdGenerator = 1;
+    // 아이템 정보
+    public List<ItemSaveData> Items = new List<ItemSaveData>();
 }
 
 // 데이터를 저장할 때,
@@ -44,6 +49,18 @@ public enum HeroOwningState
     Unowned, // 없음
     Owned,   // 가짐
     Picked,  // 선택해서 사용 중
+}
+
+[Serializable]
+public class ItemSaveData
+{
+    public int InstanceId;  // DbId(데이터베이스) 말고 인게임에서 해당 아이템을 지정하는 용도의 Id
+    public int DbId;        // 데이터 베이스 기준 해당 아이템의 ID(유니크한 id) -> 중복 없이 점점 늘어나기에 오래된 게임일수록 기하급수적으로 커진다
+    public int DataId;      // 종류 구분용 Id
+    public int Count;
+    public int EquipSlot; // 단순히 장착하는 용도 뿐 아니라, 인벤, 창고 등 번호를 통해 분류 가능하다(1~10 / 100 / 300~~)
+    // 온라인 게임이라면 owner 같은 소유자 id?? 가 필요할지도
+    public int EnchantCount; // 강화 여부
 }
 
 public class GameManager
