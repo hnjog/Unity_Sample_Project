@@ -116,6 +116,13 @@ public class GameManager
     public int OwnedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == HeroOwningState.Owned).Count(); } }
     public int PickedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == HeroOwningState.Picked).Count(); } }
 
+    public int GenerateItemDbId()
+    {
+        int itemDbId = _saveData.ItemDbIdGenerator;
+        _saveData.ItemDbIdGenerator++;
+        return itemDbId;
+    }
+
     #endregion
 
     #region Hero
@@ -212,6 +219,13 @@ public class GameManager
 
     public void SaveGame()
     {
+        // Item
+        {
+            SaveData.Items.Clear();
+            //foreach (var item in Managers.Inventory.AllItems)
+            //    SaveData.Items.Add(item.SaveData);
+        }
+
         string jsonStr = JsonUtility.ToJson(Managers.Game.SaveData);
         File.WriteAllText(Path, jsonStr);
         Debug.Log($"Save Game Completed : {Path}");
