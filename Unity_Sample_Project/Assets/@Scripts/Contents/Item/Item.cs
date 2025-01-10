@@ -1,3 +1,4 @@
+using Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -58,6 +59,150 @@ public class Item
 
     public virtual bool Init()
     {
+        return true;
+    }
+
+    public static Item MakeItem(ItemSaveData itemInfo)
+    {
+        if (Managers.Data.ItemDic.TryGetValue(itemInfo.DataId, out ItemData itemData) == false)
+            return null;
+
+        Item item = null;
+
+        switch (itemData.Type)
+        {
+            case EItemType.Weapon:
+                item = new Equipment(itemInfo.DataId);
+                break;
+            case EItemType.Armor:
+                item = new Equipment(itemInfo.DataId);
+                break;
+            case EItemType.Potion:
+                item = new Consumable(itemInfo.DataId);
+                break;
+            case EItemType.Scroll:
+                item = new Consumable(itemInfo.DataId);
+                break;
+        }
+
+        if (item != null)
+        {
+            item.SaveData = itemInfo;
+            item.InstanceId = itemInfo.InstanceId;
+            item.Count = itemInfo.Count;
+        }
+
+        return item;
+    }
+
+    #region Helpers
+    public bool IsEquippable()
+    {
+        return GetEquipItemEquipSlot() != EEquipSlotType.None;
+    }
+
+    public EEquipSlotType GetEquipItemEquipSlot()
+    {
+        if (ItemType == EItemType.Weapon)
+            return EEquipSlotType.Weapon;
+
+        if (ItemType == EItemType.Armor)
+        {
+            switch (SubType)
+            {
+                case EItemSubType.Helmet:
+                    return EEquipSlotType.Helmet;
+                case EItemSubType.Armor:
+                    return EEquipSlotType.Armor;
+                case EItemSubType.Shield:
+                    return EEquipSlotType.Shield;
+                case EItemSubType.Gloves:
+                    return EEquipSlotType.Gloves;
+                case EItemSubType.Shoes:
+                    return EEquipSlotType.Shoes;
+            }
+        }
+
+        return EEquipSlotType.None;
+    }
+
+    public bool IsEquippedItem()
+    {
+        return SaveData.EquipSlot > (int)EEquipSlotType.None && SaveData.EquipSlot < (int)EEquipSlotType.EquipMax;
+    }
+
+    public bool IsInInventory()
+    {
+        return SaveData.EquipSlot == (int)EEquipSlotType.Inventory;
+    }
+
+    public bool IsInWarehouse()
+    {
+        return SaveData.EquipSlot == (int)EEquipSlotType.WareHouse;
+    }
+    #endregion
+}
+
+public class Equipment : Item
+{
+    public int Damage { get; private set; }
+    public int Defence { get; private set; }
+    public double Speed { get; private set; }
+
+    protected Data.EquipmentData EquipmentData { get { return (Data.EquipmentData)TemplateData; } }
+
+    public Equipment(int templateId) : base(templateId)
+    {
+        Init();
+    }
+
+    public override bool Init()
+    {
+        if (base.Init() == false)
+            return false;
+
+        if (TemplateData == null)
+            return false;
+
+        if (TemplateData.Type != EItemType.Armor || TemplateData.Type != EItemType.Weapon)
+            return false;
+
+        EquipmentData data = (EquipmentData)TemplateData;
+        {
+            Damage = data.Damage;
+            Defence = data.Defence;
+            Speed = data.Speed;
+        }
+
+        return true;
+    }
+}
+
+public class Consumable : Item
+{
+    public double Value { get; private set; }
+
+    public Consumable(int templateId) : base(templateId)
+    {
+        Init();
+    }
+
+    public override bool Init()
+    {
+        if (base.Init() == false)
+            return false;
+
+        if (TemplateData == null)
+            return false;
+
+        if (TemplateData.Type != EItemType.Potion || TemplateData.Type != EItemType.Scroll)
+            return false;
+
+        ConsumableData data = (ConsumableData)TemplateData;
+        {
+            Value = data.Value;
+        }
+
         return true;
     }
 }
