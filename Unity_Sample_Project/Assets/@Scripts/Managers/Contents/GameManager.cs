@@ -222,8 +222,8 @@ public class GameManager
         // Item
         {
             SaveData.Items.Clear();
-            //foreach (var item in Managers.Inventory.AllItems)
-            //    SaveData.Items.Add(item.SaveData);
+            foreach (var item in Managers.Inventory.AllItems)
+                SaveData.Items.Add(item.SaveData);
         }
 
         string jsonStr = JsonUtility.ToJson(Managers.Game.SaveData);
