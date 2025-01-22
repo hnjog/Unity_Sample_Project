@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using static Define;
 using Random = UnityEngine.Random;
 
 // 직렬화 가능 : 데이터를 특정한 형식으로 변환하여 저장하거나 전송 가능하도록 설정
@@ -27,6 +28,10 @@ public class GameSaveData
     public int ItemDbIdGenerator = 1;
     // 아이템 정보
     public List<ItemSaveData> Items = new List<ItemSaveData>();
+
+    public List<QuestSaveData> ProcessingQuests = new List<QuestSaveData>(); // 진행중
+    public List<QuestSaveData> CompletedQuests = new List<QuestSaveData>(); // 완료
+    public List<QuestSaveData> RewardedQuests = new List<QuestSaveData>(); // 보상 받음
 }
 
 // 데이터를 저장할 때,
@@ -63,6 +68,16 @@ public class ItemSaveData
     public int EnchantCount; // 강화 여부
 }
 
+[Serializable]
+public class QuestSaveData
+{
+    public int TemplateId;
+    public EQuestState State = EQuestState.None; // 퀘스트 상태
+    public List<int> ProgressCount = new List<int>();
+    // 클라 솔로 게임이므로(온라인이면 서버에서 관리)
+    public DateTime NextResetTime;
+}
+
 public class GameManager
 {
     #region GameData
@@ -75,7 +90,6 @@ public class GameManager
         private set
         {
             _saveData.Wood = value;
-            //(Managers.UI.SceneUI as UI_GameScene)?.RefreshWoodText();
         }
     }
 
@@ -85,7 +99,6 @@ public class GameManager
         private set
         {
             _saveData.Mineral = value;
-            //(Managers.UI.SceneUI as UI_GameScene)?.RefreshMineralText();
         }
     }
 
@@ -95,7 +108,6 @@ public class GameManager
         private set
         {
             _saveData.Meat = value;
-            //(Managers.UI.SceneUI as UI_GameScene)?.RefreshMeatText();
         }
     }
 
@@ -105,7 +117,6 @@ public class GameManager
         private set
         {
             _saveData.Gold = value;
-            //(Managers.UI.SceneUI as UI_GameScene)?.RefreshGoldText();
         }
     }
 

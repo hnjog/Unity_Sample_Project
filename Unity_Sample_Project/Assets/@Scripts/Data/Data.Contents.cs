@@ -486,4 +486,49 @@ namespace Data
 
     #endregion
 
+    #region QuestData
+
+    [Serializable]
+    public class QuestData
+    {
+        public int TemplateId;
+        public string DescriptionTextId;
+        public EQuestPeriodType QuestPeriodType;
+        // start npc? end npd?
+        // quest condition?
+        public List<QuestTaskData> QuestTasks = new List<QuestTaskData>(); // 퀘스트 임무
+        public List<QuestRewardData> Rewards = new List<QuestRewardData>(); // 퀘스트 보상
+
+    }
+    [Serializable]
+    public class QuestTaskData
+    {
+        public EQuestObjectiveType ObjectiveType; // 퀘스트 타입
+        public string DescriptionTextId; // 퀘스트 텍스트
+        public int ObjectiveDataId; // 퀘스트 목적 물체 id
+        public int ObjectiveCount; // 퀘스트 목적 물체 횟수(진행도)
+    }
+
+    [Serializable]
+    public class QuestRewardData
+    {
+        public EQuestRewardType RewardType;
+        public int RewardDataId;
+        public int RewardCount;
+    }
+
+    [Serializable]
+    public class QuestDataLoader : ILoader<int, QuestData>
+    {
+        public List<QuestData> quests = new List<QuestData>();
+        public Dictionary<int, QuestData> MakeDict()
+        {
+            Dictionary<int, QuestData> dict = new Dictionary<int, QuestData>();
+            foreach (QuestData quest in quests)
+                dict.Add(quest.TemplateId, quest);
+            return dict;
+        }
+    }
+    #endregion
+
 }

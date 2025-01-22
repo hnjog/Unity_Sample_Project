@@ -265,6 +265,65 @@ public static class Define
         Inventory = 100,
         WareHouse = 200,
     }
+    public enum EQuestPeriodType
+    {
+        Once, // 단발성
+        Daily,
+        Weekly,
+        Infinite, // 무한으로
+    }
+
+    public enum EQuestCondition
+    {
+        None,
+        Level,
+        ItemLevel,
+
+    }
+
+    public enum EQuestObjectiveType
+    {
+        // 퀘스트 목적
+        KillMonster,
+        EarnMeat,
+        SpendMeat,
+        EarnWood,
+        SpendWood,
+        EarnMineral,
+        SpendMineral,
+        EarnGold,
+        SpendGold,
+        UseItem,
+        Survival,
+    }
+    public enum EQuestRewardType
+    {
+        // 퀘스트 보상 방식
+        Hero,
+        Gold,
+        Mineral,
+        Meat,
+        Wood,
+        Item,
+    }
+
+    public enum EQuestState
+    {
+        None,
+        Processing,
+        Completed,
+        Rewarded,
+    }
+    public enum EBroadcastEventType
+    {
+        None,
+        ChangeMeat,
+        ChangeWood,
+        ChangeMineral,
+        ChangeGold,
+        KillMonster,
+        LevelUp,
+    }
 
     public const float EFFECT_SMALL_RADIUS = 2.5f;
     public const float EFFECT_NORMAL_RADIUS = 4.5f;
