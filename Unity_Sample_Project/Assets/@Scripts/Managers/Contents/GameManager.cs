@@ -237,6 +237,22 @@ public class GameManager
                 SaveData.Items.Add(item.SaveData);
         }
 
+        // Quest
+        {
+            SaveData.ProcessingQuests.Clear();
+            SaveData.CompletedQuests.Clear();
+            SaveData.RewardedQuests.Clear();
+
+            foreach (Quest item in Managers.Quest.ProcessingQuests)
+                SaveData.ProcessingQuests.Add(item.SaveData);
+
+            foreach (Quest item in Managers.Quest.CompletedQuests)
+                SaveData.CompletedQuests.Add(item.SaveData);
+
+            foreach (Quest item in Managers.Quest.RewardedQuests)
+                SaveData.RewardedQuests.Add(item.SaveData);
+        }
+
         string jsonStr = JsonUtility.ToJson(Managers.Game.SaveData);
         File.WriteAllText(Path, jsonStr);
         Debug.Log($"Save Game Completed : {Path}");
@@ -253,6 +269,37 @@ public class GameManager
         if (data != null)
             Managers.Game.SaveData = data;
 
+        {
+            Managers.Inventory.Clear();
+
+            foreach (ItemSaveData itemSaveData in data.Items)
+            {
+                Managers.Inventory.AddItem(itemSaveData);
+            }
+        }
+
+        // Quest
+        {
+            Managers.Quest.Clear();
+
+            foreach (QuestSaveData questSaveData in data.ProcessingQuests)
+            {
+                Managers.Quest.AddQuest(questSaveData);
+            }
+
+            foreach (QuestSaveData questSaveData in data.CompletedQuests)
+            {
+                Managers.Quest.AddQuest(questSaveData);
+            }
+
+            foreach (QuestSaveData questSaveData in data.RewardedQuests)
+            {
+                Managers.Quest.AddQuest(questSaveData);
+            }
+
+            Managers.Quest.AddUnknownQuests();
+        }
+
         Debug.Log($"Save Game Loaded : {Path}");
         return true;
     }
@@ -263,5 +310,7 @@ public class GameManager
     // Hero + Npc (구독자)
     public event Action<Vector2> OnMoveDirChanged;
     public event Action<Define.EJoystickState> OnJoystickStateChanged;
+
+    public event Action<EBroadcastEventType, int> OnBroadcastEvent;
     #endregion
 }
