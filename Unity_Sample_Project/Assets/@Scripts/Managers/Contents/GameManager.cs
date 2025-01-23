@@ -99,6 +99,7 @@ public class GameManager
         private set
         {
             _saveData.Mineral = value;
+            BroadcastEvent(EBroadcastEventType.ChangeMineral, value);
         }
     }
 
@@ -108,6 +109,7 @@ public class GameManager
         private set
         {
             _saveData.Meat = value;
+            BroadcastEvent(EBroadcastEventType.ChangeMeat, value);
         }
     }
 
@@ -117,7 +119,13 @@ public class GameManager
         private set
         {
             _saveData.Gold = value;
+            BroadcastEvent(EBroadcastEventType.ChangeGold, value);
         }
+    }
+
+    public void BroadcastEvent(EBroadcastEventType eventType, int value)
+    {
+        OnBroadcastEvent?.Invoke(eventType, value);
     }
 
     public List<HeroSaveData> AllHeroes { get { return _saveData.Heroes; } }
