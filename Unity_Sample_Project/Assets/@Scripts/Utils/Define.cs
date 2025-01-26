@@ -302,7 +302,8 @@ public static class Define
         EarnGold,
         SpendGold,
         UseItem,
-        Survival,
+        Survival, 
+        ClearDungeon,
     }
     public enum EQuestRewardType
     {
@@ -331,6 +332,10 @@ public static class Define
         ChangeGold,
         KillMonster,
         LevelUp,
+        DungeonClear,
+        ChangeInventory,
+        ChangeCrew,
+        QuestClear,
     }
 
     public const float EFFECT_SMALL_RADIUS = 2.5f;

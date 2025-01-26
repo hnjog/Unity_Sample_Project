@@ -96,6 +96,8 @@ public class Managers : MonoBehaviour
 
             // 초기화
             s_instance = gameObject.AddComponent<Managers>();
+
+            s_instance._quest.Init();
         }
     }
 }
