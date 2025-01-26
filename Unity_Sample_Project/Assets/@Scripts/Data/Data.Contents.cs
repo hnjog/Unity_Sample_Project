@@ -45,12 +45,6 @@ namespace Data
     {
         public int DropItemId;
         // scriptable Object를 통해 에디터에서 수정할 수 있는점은 고려할 법하다
-
-        // 몬스터 데이터에서 DropTableData를 가지고 있도록 처리하기 위함
-        // 그리고 DataTransformer에서 해당 부분은 파싱하지 않도록 처리
-        // (괜히 엑셀에서 데이터 찾지 말고 건너띄도록)
-        [NonSerialized]
-        public DropTableData DropTable;
     }
 
     [Serializable]
@@ -292,6 +286,7 @@ namespace Data
         public string PrefabLabel;
         public string SpriteName;
         public string SkeletonDataID;
+        public int QuestDataId;
     }
 
     [Serializable]
@@ -491,7 +486,8 @@ namespace Data
     [Serializable]
     public class QuestData
     {
-        public int TemplateId;
+        public int DataId;
+        public string Name;
         public string DescriptionTextId;
         public EQuestPeriodType QuestPeriodType;
         // start npc? end npd?
@@ -504,7 +500,6 @@ namespace Data
     public class QuestTaskData
     {
         public EQuestObjectiveType ObjectiveType; // 퀘스트 타입
-        public string DescriptionTextId; // 퀘스트 텍스트
         public int ObjectiveDataId; // 퀘스트 목적 물체 id
         public int ObjectiveCount; // 퀘스트 목적 물체 횟수(진행도)
     }
@@ -525,7 +520,7 @@ namespace Data
         {
             Dictionary<int, QuestData> dict = new Dictionary<int, QuestData>();
             foreach (QuestData quest in quests)
-                dict.Add(quest.TemplateId, quest);
+                dict.Add(quest.DataId, quest);
             return dict;
         }
     }

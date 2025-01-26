@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Collections;
 using System.ComponentModel;
 using Unity.VisualScripting;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 // Editor 폴더를 만들어 그 안에 스크립트가 생성되어 C# 에디터라는 프로젝트로 분리됨
 public class DataTransformer : EditorWindow
@@ -50,6 +51,7 @@ public class DataTransformer : EditorWindow
         ParseExcelDataToJson<ItemDataLoader<ConsumableData>, ConsumableData>("Item_Consumable");
 
         ParseExcelDataToJson<DropTableDataLoader, DropTableData_Internal>("DropTable");
+        ParseExcelDataToJson<QuestDataLoader, QuestData>("Quest");
 
         Debug.Log("DataTransformer Completed");
     }
@@ -71,20 +73,38 @@ public class DataTransformer : EditorWindow
     {
         List<LoaderData> loaderDatas = new List<LoaderData>();
 
-        string[] lines = File.ReadAllText($"{Application.dataPath}/@Resources/Data/ExcelData/{filename}Data.csv").Split("\n");
+        string[] lines = File.ReadAllText($"{Application.dataPath}/@Resources/Data/ExcelData/{filename}Data.csv").Trim().Split("\n");
 
+        List<string[]> rows = new List<string[]>();
+
+        int innerFieldCount = 0;
         for (int l = 1; l < lines.Length; l++)
         {
             string[] row = lines[l].Replace("\r", "").Split(',');
-            if (row.Length == 0)
+            rows.Add(row);
+        }
+
+        for (int r = 0; r < rows.Count; r++)
+        {
+            if (rows[r].Length == 0)
                 continue;
-            if (string.IsNullOrEmpty(row[0]))
+            if (string.IsNullOrEmpty(rows[r][0]))
                 continue;
+
+            innerFieldCount = 0;
 
             // TestData 가 일단 위쪽에서 사용 중
             LoaderData loaderData = new LoaderData();
-            // 부모것을 나중에 가져 오도록
-            var fields = GetFieldsInBase(typeof(LoaderData));
+            Type loaderDataType = typeof(LoaderData);
+            BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            var fields = GetFieldsInBase(loaderDataType, bindingFlags);
+
+            int nextIndex;
+            for (nextIndex = r + 1; nextIndex < rows.Count; nextIndex++)
+            {
+                if (string.IsNullOrEmpty(rows[nextIndex][0]) == false)
+                    break;
+            }
 
             // TestData의 모든 필드(변수 요소들)를 가져온다
             // 필드를 순회하여 개체의 해당 필드를 가져온다
@@ -95,21 +115,112 @@ public class DataTransformer : EditorWindow
                 FieldInfo field = loaderData.GetType().GetField(fields[f].Name);
                 Type type = field.FieldType;
 
-                if (field.HasAttribute(typeof(NonSerializedAttribute)))
-                    continue;
-
                 // 제네릭 타입이라면 ConvertList 호출하여 변환
                 if (type.IsGenericType)
                 {
-                    object value = ConvertList(row[f], type);
-                    // fieldInfo 이기에
-                    // 실제로 값을 써줄 대상(이 필드가 속한 인스턴스)에 값을 써준다
-                    field.SetValue(loaderData, value);
+                    Type valueType = type.GetGenericArguments()[0];
+                    Type genericListType = typeof(List<>).MakeGenericType(valueType);
+                    var genericList = Activator.CreateInstance(genericListType) as IList;
+
+                    for (int i = r; i < nextIndex; i++)
+                    {
+                        if (string.IsNullOrEmpty(rows[i][f + innerFieldCount]))
+                            continue;
+                        Debug.Log($"filename = {filename} ,  {field} -> {rows[i][f]}");
+                        {
+                            bool isCustomClass = valueType.IsClass && !valueType.IsPrimitive && valueType != typeof(string);
+
+                            if (isCustomClass)
+                            {
+                                object fieldInstance = Activator.CreateInstance(valueType);
+
+                                Type fieldType = fieldInstance.GetType();
+                                FieldInfo[] fieldInfos = fieldType.GetFields(BindingFlags.Public | BindingFlags.Instance);
+
+                                for (int k = 0; k < fieldInfos.Length; k++)
+                                {
+                                    FieldInfo innerField = valueType.GetFields()[k];
+                                    string str = rows[i][f + innerFieldCount + k];
+                                    object convertedValue = ConvertValue(str, innerField.FieldType);
+                                    if (convertedValue != null)
+                                    {
+                                        innerField.SetValue(fieldInstance, convertedValue);
+                                    }
+                                }
+
+                                string nextStr = null;
+                                if (i + 1 < rows.Count)
+                                {
+                                    if (f + innerFieldCount < rows[i + 1].Length)
+                                    {
+                                        //DataId가 null이면 리스트가 아직 끝난게 아님
+                                        if (string.IsNullOrEmpty(rows[i + 1][0]))
+                                            nextStr = rows[i + 1][f + innerFieldCount];
+                                    }
+                                }
+                                if (string.IsNullOrEmpty(nextStr))
+                                {
+                                    innerFieldCount = fieldInfos.Length - 1;
+                                }
+                                else if (i + 1 == nextIndex)
+                                    innerFieldCount = fieldInfos.Length - 1;
+
+                                genericList.Add(fieldInstance);
+
+                                // field.SetValue(loaderData, fieldInstance);
+                            }
+                            else
+                            {
+                                object value = ConvertValue(rows[i][f], valueType);
+                                genericList.Add(value);
+                            }
+                        }
+                    }
+
+                    if (genericList != null)
+                    {
+                        field.SetValue(loaderData, genericList);
+                    }
                 }
                 else
                 {
-                    object value = ConvertValue(row[f], field.FieldType);
-                    field.SetValue(loaderData, value);
+                    Debug.Log($"filename = {filename} ,  {field} -> {rows[r][f]}");
+                    if (rows[r][f].Contains("780"))
+                    {
+                        Debug.Log($"filename = {filename} ,  {field} -> {rows[r][f]}");
+                    }
+
+                    bool isCustomClass = field.FieldType.IsClass && !field.FieldType.IsPrimitive && field.FieldType != typeof(string);
+                    if (isCustomClass)
+                    {
+                        object fieldInstance = Activator.CreateInstance(field.FieldType);
+
+                        Type fieldType = fieldInstance.GetType();
+                        FieldInfo[] fieldInfos = fieldType.GetFields(BindingFlags.Public | BindingFlags.Instance);
+
+                        for (int i = 0; i < fieldInfos.Length; i++)
+                        {
+                            FieldInfo innerField = field.FieldType.GetFields()[i];
+                            string value = rows[r][f + innerFieldCount + i];
+                            object convertedValue = ConvertValue(value, innerField.FieldType);
+                            if (convertedValue != null)
+                            {
+                                innerField.SetValue(fieldInstance, convertedValue);
+                            }
+
+                        }
+                        innerFieldCount = fieldInfos.Length - 1;
+                        field.SetValue(loaderData, fieldInstance);
+                    }
+                    else
+                    {
+                        //기타필드 처리
+                        object value = ConvertValue(rows[r][f], field.FieldType);
+                        if (value != null)
+                        {
+                            field.SetValue(loaderData, value);
+                        }
+                    }
                 }
             }
 
@@ -151,6 +262,33 @@ public class DataTransformer : EditorWindow
             genericList.Add(item);
 
         return genericList;
+    }
+
+    private static IList ParseCsvDataToList(string csvData, Type itemType)
+    {
+        var listType = typeof(List<>).MakeGenericType(new Type[] { itemType });
+        var list = Activator.CreateInstance(listType) as IList;
+
+        if (string.IsNullOrEmpty(csvData)) return list;
+
+        var items = csvData.Split('\n');
+        foreach (var item in items)
+        {
+            var obj = Activator.CreateInstance(itemType);
+            var props = item.Split(',');
+
+            var fields = itemType.GetFields(BindingFlags.Public | BindingFlags.Instance);
+            for (int i = 0; i < fields.Length && i < props.Length; i++)
+            {
+                var field = fields[i];
+                object value = Convert.ChangeType(props[i], field.FieldType);
+                field.SetValue(obj, value);
+            }
+
+            list.Add(obj);
+        }
+
+        return list;
     }
 
     public static List<FieldInfo> GetFieldsInBase(Type type, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
