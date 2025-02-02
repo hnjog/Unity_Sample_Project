@@ -87,7 +87,9 @@ public class GameManager
         get { return _saveData.Wood; }
         private set
         {
+            int diff = _saveData.Wood - value;
             _saveData.Wood = value;
+            OnBroadcastEvent?.Invoke(EBroadcastEventType.ChangeWood, diff);
         }
     }
 
@@ -96,8 +98,9 @@ public class GameManager
         get { return _saveData.Mineral; }
         private set
         {
+            int diff = _saveData.Mineral - value;
             _saveData.Mineral = value;
-            BroadcastEvent(EBroadcastEventType.ChangeMineral, value);
+            OnBroadcastEvent?.Invoke(EBroadcastEventType.ChangeMineral, diff);
         }
     }
 
@@ -106,8 +109,9 @@ public class GameManager
         get { return _saveData.Meat; }
         private set
         {
+            int diff = _saveData.Meat - value;
             _saveData.Meat = value;
-            BroadcastEvent(EBroadcastEventType.ChangeMeat, value);
+            OnBroadcastEvent?.Invoke(EBroadcastEventType.ChangeMeat, diff);
         }
     }
 
@@ -116,8 +120,9 @@ public class GameManager
         get { return _saveData.Gold; }
         private set
         {
+            int diff = _saveData.Gold - value;
             _saveData.Gold = value;
-            BroadcastEvent(EBroadcastEventType.ChangeGold, value);
+            OnBroadcastEvent?.Invoke(EBroadcastEventType.ChangeGold, diff);
         }
     }
 
