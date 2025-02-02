@@ -121,6 +121,78 @@ public class GameManager
         }
     }
 
+    public bool CheckResource(EResourceType eResourceType, int amount)
+    {
+        switch (eResourceType)
+        {
+            case EResourceType.Wood:
+                return Wood >= amount;
+            case EResourceType.Mineral:
+                return Mineral >= amount;
+            case EResourceType.Meat:
+                return Meat >= amount;
+            case EResourceType.Gold:
+                return Gold >= amount;
+            case EResourceType.Dia:
+                return true;
+            case EResourceType.Materials:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public bool SpendResource(EResourceType eResourceType, int amount)
+    {
+        if (CheckResource(eResourceType, amount) == false)
+            return false;
+
+        switch (eResourceType)
+        {
+            case EResourceType.Wood:
+                Wood -= amount;
+                break;
+            case EResourceType.Mineral:
+                Mineral -= amount;
+                break;
+            case EResourceType.Meat:
+                Meat -= amount;
+                break;
+            case EResourceType.Gold:
+                Gold -= amount;
+                break;
+            case EResourceType.Dia:
+                break;
+            case EResourceType.Materials:
+                break;
+        }
+
+        return true;
+    }
+
+    public void EarnResource(EResourceType eResourceType, int amount)
+    {
+        switch (eResourceType)
+        {
+            case EResourceType.Wood:
+                Wood += amount;
+                break;
+            case EResourceType.Mineral:
+                Mineral += amount;
+                break;
+            case EResourceType.Meat:
+                Meat += amount;
+                break;
+            case EResourceType.Gold:
+                Gold += amount;
+                break;
+            case EResourceType.Dia:
+                break;
+            case EResourceType.Materials:
+                break;
+        }
+    }
+
     public void BroadcastEvent(EBroadcastEventType eventType, int value)
     {
         OnBroadcastEvent?.Invoke(eventType, value);
