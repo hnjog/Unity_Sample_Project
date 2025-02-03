@@ -34,6 +34,20 @@ public class Npc : BaseObject
 
     private void Update()
     {
+        // interaction check
+        if (Interaction != null && Interaction.CanInteract())
+        {
+            _ui.gameObject.SetActive(true);
+        }
+        else
+        {
+            _ui.gameObject.SetActive(false);
+        }
+    }
+
+
+    private void Update()
+    {
         if (Interaction != null && Interaction.CanInteract())
         {
             _ui.gameObject.SetActive(true);
@@ -58,6 +72,15 @@ public class Npc : BaseObject
         button.transform.localPosition = new Vector3(0f, 3f);
         _ui = button.GetComponent<UI_NpcInteraction>();
         _ui.SetInfo(DataTemplateID, this);
+
+        switch (Data.NpcType)
+        {
+            case ENpcType.Quest:
+                Interaction = new QuestInteraction();
+                break;
+        }
+
+        Interaction?.SetInfo(this);
     }
 
     public virtual void OnClickEvent()

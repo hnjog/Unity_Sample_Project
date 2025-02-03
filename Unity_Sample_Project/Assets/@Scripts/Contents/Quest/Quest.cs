@@ -74,31 +74,31 @@ public class Quest
 
         SaveData.State = EQuestState.Rewarded;
 
-        //foreach (var reward in QuestData.Rewards)
-        //{
-        //    switch (reward.RewardType)
-        //    {
-        //        case EQuestRewardType.Gold:
-        //            Managers.Game.EarnResource(EResourceType.Gold, reward.RewardCount);
-        //            break;
-        //        case EQuestRewardType.Hero:
-        //            int heroId = reward.RewardDataId;
-        //            Managers.Hero.AcquireHeroCard(heroId, reward.RewardCount);
-        //            Managers.Hero.PickHero(heroId, Vector3Int.zero);
-        //            break;
-        //        case EQuestRewardType.Meat:
-        //            Managers.Game.EarnResource(EResourceType.Meat, reward.RewardCount);
-        //            break;
-        //        case EQuestRewardType.Mineral:
-        //            Managers.Game.EarnResource(EResourceType.Mineral, reward.RewardCount);
-        //            break;
-        //        case EQuestRewardType.Wood:
-        //            Managers.Game.EarnResource(EResourceType.Wood, reward.RewardCount);
-        //            break;
-        //        case EQuestRewardType.Item:
-        //            break;
-        //    }
-        //}
+        foreach (var reward in QuestData.Rewards)
+        {
+            switch (reward.RewardType)
+            {
+                case EQuestRewardType.Gold:
+                    Managers.Game.EarnResource(EResourceType.Gold, reward.RewardCount);
+                    break;
+                case EQuestRewardType.Hero:
+                    int heroId = reward.RewardDataId;
+                    //Managers.Hero.AcquireHeroCard(heroId, reward.RewardCount);
+                    //Managers.Hero.PickHero(heroId, Vector3Int.zero);
+                    break;
+                case EQuestRewardType.Meat:
+                    Managers.Game.EarnResource(EResourceType.Meat, reward.RewardCount);
+                    break;
+                case EQuestRewardType.Mineral:
+                    Managers.Game.EarnResource(EResourceType.Mineral, reward.RewardCount);
+                    break;
+                case EQuestRewardType.Wood:
+                    Managers.Game.EarnResource(EResourceType.Wood, reward.RewardCount);
+                    break;
+                case EQuestRewardType.Item:
+                    break;
+            }
+        }
     }
 
     public static Quest MakeQuest(QuestSaveData saveData)
