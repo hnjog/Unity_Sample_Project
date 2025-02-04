@@ -33,6 +33,13 @@ public static class Define
         Max,
     }
 
+    public enum EHeroOwningState
+    {
+        Unowned, // 없음
+        Owned,   // 가짐
+        Picked,  // 선택해서 사용 중
+    }
+
     public enum EObjectType
     {
         None,

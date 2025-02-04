@@ -44,14 +44,7 @@ public class HeroSaveData
     public int Level = 1;
     public int Exp = 0;
     // 보유 여부
-    public HeroOwningState OwningState = HeroOwningState.Unowned;
-}
-
-public enum HeroOwningState
-{
-    Unowned, // 없음
-    Owned,   // 가짐
-    Picked,  // 선택해서 사용 중
+    public EHeroOwningState OwningState = EHeroOwningState.Unowned;
 }
 
 [Serializable]
@@ -206,9 +199,9 @@ public class GameManager
     public List<HeroSaveData> AllHeroes { get { return _saveData.Heroes; } }
     public int TotalHeroCount { get { return _saveData.Heroes.Count; } }
     // LINQ, 매 프레임 사용할 것은 아니기에 사용
-    public int UnownedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == HeroOwningState.Unowned).Count(); } }
-    public int OwnedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == HeroOwningState.Owned).Count(); } }
-    public int PickedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == HeroOwningState.Picked).Count(); } }
+    public int UnownedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == EHeroOwningState.Unowned).Count(); } }
+    public int OwnedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == EHeroOwningState.Owned).Count(); } }
+    public int PickedHeroCount { get { return _saveData.Heroes.Where(h => h.OwningState == EHeroOwningState.Picked).Count(); } }
 
     public int GenerateItemDbId()
     {
@@ -335,8 +328,8 @@ public class GameManager
         }
 
         // TEMP
-        SaveData.Heroes[0].OwningState = HeroOwningState.Picked;
-        SaveData.Heroes[1].OwningState = HeroOwningState.Owned;
+        SaveData.Heroes[0].OwningState = EHeroOwningState.Picked;
+        SaveData.Heroes[1].OwningState = EHeroOwningState.Owned;
 
         Wood = 100;
         Gold = 100;
