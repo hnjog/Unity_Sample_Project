@@ -33,15 +33,18 @@ public class DataManager
 
     public void Init()
     {
+        MonsterDic = LoadJson<Data.MonsterDataLoader, int, Data.MonsterData>("MonsterData").MakeDict();
         HeroDic = LoadJson<Data.HeroDataLoader, int, Data.HeroData>("HeroData").MakeDict();
         HeroInfoDic = LoadJson<Data.HeroInfoDataLoader, int, Data.HeroInfoData>("HeroInfoData").MakeDict();
-        MonsterDic = LoadJson<Data.MonsterDataLoader, int, Data.MonsterData>("MonsterData").MakeDict();
         SkillDic = LoadJson<Data.SkillDataLoader, int, Data.SkillData>("SkillData").MakeDict();
         ProjectileDic = LoadJson<Data.ProjectileDataLoader, int, Data.ProjectileData>("ProjectileData").MakeDict();
         EnvDic = LoadJson<Data.EnvDataLoader, int, Data.EnvData>("EnvData").MakeDict();
         EffectDic = LoadJson<Data.EffectDataLoader, int, Data.EffectData>("EffectData").MakeDict();
         AoEDic = LoadJson<Data.AoEDataLoader, int, Data.AoEData>("AoEData").MakeDict();
-        NpcDic = LoadJson<Data.NpcDataLoader, int, Data.NpcData>("NpcData").MakeDict();
+
+        Data.NpcDataLoader npcDataLoader = LoadJson<Data.NpcDataLoader, int, Data.NpcData>("NpcData");
+        NpcDic = npcDataLoader.MakeDict();
+
         TextDic = LoadJson<Data.TextDataLoader, string, Data.TextData>("TextData").MakeDict();
         EquipmentDic = LoadJson<Data.ItemDataLoader<Data.EquipmentData>, int, Data.EquipmentData>("Item_EquipmentData").MakeDict();
         ConsumableDic = LoadJson<Data.ItemDataLoader<Data.ConsumableData>, int, Data.ConsumableData>("Item_ConsumableData").MakeDict();
@@ -55,9 +58,11 @@ public class DataManager
 
         foreach (var item in ConsumableDic)
             ItemDic.Add(item.Key, item.Value);
-    }
 
-    private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
+        // Validation
+        npcDataLoader.Validate();
+
+        private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
     {
         // 특정 경로의 Text 에셋
         // Addressable 방식으로 load
