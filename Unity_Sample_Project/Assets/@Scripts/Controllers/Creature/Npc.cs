@@ -45,19 +45,6 @@ public class Npc : BaseObject
         }
     }
 
-
-    private void Update()
-    {
-        if (Interaction != null && Interaction.CanInteract())
-        {
-            _ui.gameObject.SetActive(true);
-        }
-        else
-        {
-            _ui.gameObject.SetActive(false);
-        }
-    }
-
     public void SetInfo(int dataId)
     {
         Data = Managers.Data.NpcDic[dataId];
