@@ -339,6 +339,15 @@ public class GameManager
 
     public void SaveGame()
     {
+        // Hero
+        {
+            SaveData.Heroes.Clear();
+            foreach (var heroinfo in Managers.Hero.AllHeroInfos.Values)
+            {
+                SaveData.Heroes.Add(heroinfo.SaveData);
+            }
+        }
+
         // Item
         {
             SaveData.Items.Clear();
@@ -371,6 +380,19 @@ public class GameManager
         if (data != null)
             Managers.Game.SaveData = data;
 
+        // Hero
+        {
+            Managers.Hero.AllHeroInfos.Clear();
+
+            foreach (var saveData in data.Heroes)
+            {
+                Managers.Hero.AddHeroInfo(saveData);
+            }
+
+            Managers.Hero.AddUnknownHeroes();
+        }
+
+        // Item
         {
             Managers.Inventory.Clear();
 

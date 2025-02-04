@@ -83,8 +83,8 @@ public class Quest
                     break;
                 case EQuestRewardType.Hero:
                     int heroId = reward.RewardDataId;
-                    //Managers.Hero.AcquireHeroCard(heroId, reward.RewardCount);
-                    //Managers.Hero.PickHero(heroId, Vector3Int.zero);
+                    Managers.Hero.AcquireHeroCard(heroId, reward.RewardCount);
+                    Managers.Hero.PickHero(heroId, Vector3Int.zero);
                     break;
                 case EQuestRewardType.Meat:
                     Managers.Game.EarnResource(EResourceType.Meat, reward.RewardCount);
