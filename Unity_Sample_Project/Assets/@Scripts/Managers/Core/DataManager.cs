@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ILoader<key,value> // Generic
+public interface ILoader<key, value> // Generic
 {
-    Dictionary<key,value> MakeDict();
+    Dictionary<key, value> MakeDict();
 
     // Validate() : 예정
     // 런타임 중 데이터를 확인하는 방식이 위험할 수 있으므로
@@ -59,10 +59,8 @@ public class DataManager
         foreach (var item in ConsumableDic)
             ItemDic.Add(item.Key, item.Value);
 
-        // Validation
-        npcDataLoader.Validate();
-
-        private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
+    }
+    private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
     {
         // 특정 경로의 Text 에셋
         // Addressable 방식으로 load
