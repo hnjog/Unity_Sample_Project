@@ -1,0 +1,39 @@
+# .NET
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.mdb
+*.log
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userprefs
+*.sln.docstates
+
+# ASP.NET
+wwwroot/lib/
+wwwroot/css/
+wwwroot/js/
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Entity Framework
+*.edmx
+*.tt
+*.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*.DS_Store
+
+# Publish folder
+Publish/
