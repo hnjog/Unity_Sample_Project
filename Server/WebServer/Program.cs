@@ -9,6 +9,7 @@ namespace WebServer
 
             // Add services to the container.
 
+            // 컨트롤러
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -27,9 +28,9 @@ namespace WebServer
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
+            // 실행
             app.Run();
         }
     }

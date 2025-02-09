@@ -1,4 +1,4 @@
-namespace WebServer
+namespace WebServer.Data
 {
     public class WeatherForecast
     {
