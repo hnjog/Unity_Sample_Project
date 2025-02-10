@@ -10,7 +10,7 @@ public class Managers : MonoBehaviour
     // 하위 매니저를 관리
     // 다른 신으로 가도 사라지지 않도록 설정하며, 자기 자신을 생성
     private static Managers s_instance;
-    private static Managers Instance {  get { Init(); return s_instance; } }
+    public static Managers Instance {  get { Init(); return s_instance; } }
 
     #region Contents
     private GameManager _game = new GameManager();
