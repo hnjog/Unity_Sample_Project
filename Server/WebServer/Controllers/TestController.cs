@@ -10,7 +10,7 @@ namespace WebServer.Controllers
     {
         // input(server에서 받음)
         [HttpPost]
-        [Route("TestPost")]
+        [Route("testPost")]
         public TestPacketRes TestPost([FromBody] TestPacketReq value)
         {
             // 가장 광범위하게 사용하며, 게임 서버와 비슷

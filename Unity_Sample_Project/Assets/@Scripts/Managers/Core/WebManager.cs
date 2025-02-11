@@ -30,7 +30,7 @@ public class WebManager
             return;
         }
 
-        BaseUrl = $"http://{ipv4.ToString()}:{port}";
+        BaseUrl = $"https://{ipv4.ToString()}:{port}";
         Debug.Log($"WebServer BaseUrl : {BaseUrl}");
     }
 
@@ -49,7 +49,6 @@ public class WebManager
         if (string.IsNullOrEmpty(BaseUrl))
             Init();
 
-        // http://127.0.0.1:7777/test/hello
         string sendUrl = $"{BaseUrl}/{url}";
 
         byte[] jsonBytes = null;
