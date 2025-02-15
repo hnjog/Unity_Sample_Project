@@ -1,0 +1,54 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userprefs
+*.sln.ide
+*.sln.docstates
+
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Rider
+.idea/
+*.sln.iml
+
+# NuGet Packages
+*.nupkg
+packages/
+*.snupkg
+
+# User-specific files
+*.rsuser
+*.sln.docstates
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Database files
+App_Data/
+*.mdf
+*.ldf
+*.ndf
+
+# Backup files
+*.bak
+
+# IDE specific backups
+*~ 
+*.tmp
+*.temp
+*.swp
+
+# Others
+*.db
+*.sqlite
