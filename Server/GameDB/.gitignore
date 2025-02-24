@@ -52,3 +52,5 @@ App_Data/
 # Others
 *.db
 *.sqlite
+
+Migrations/
