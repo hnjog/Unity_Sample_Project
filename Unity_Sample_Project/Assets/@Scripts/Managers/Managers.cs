@@ -19,6 +19,8 @@ public class Managers : MonoBehaviour
     private InventoryManager _inventory = new InventoryManager();
     private QuestManager _quest = new QuestManager();
     private HeroManager _hero = new HeroManager();
+    private WebManager _web = new WebManager();
+    private AuthManager _auth = new AuthManager();
 
     public static GameManager Game { get { return Instance?._game; } }
     public static ObjectManager Object { get { return Instance?._object; } }
@@ -26,6 +28,8 @@ public class Managers : MonoBehaviour
     public static InventoryManager Inventory { get { return Instance?._inventory; } }
     public static QuestManager Quest { get { return Instance?._quest; } }
     public static HeroManager Hero { get { return Instance?._hero; } }
+    public static WebManager Web { get { return Instance?._web; } }
+    public static AuthManager Auth { get { return Instance?._auth; } }
 
     #endregion
 
@@ -36,14 +40,14 @@ public class Managers : MonoBehaviour
     private SceneManagerEx _scene = new SceneManagerEx();
     private SoundManager _sound = new SoundManager();
     private UIManager _ui = new UIManager();
-    private WebManager _web = new WebManager();
+    
     public static DataManager Data { get { return Instance?._data; } }
     public static PoolManager Pool { get {  return Instance?._pool; } }
     public static ResourceManager Resource { get { return Instance?._resource; } }
     public static SceneManagerEx Scene { get {  return Instance?._scene; } }
     public static SoundManager Sound { get {  return Instance?._sound; } }
     public static UIManager UI { get {  return Instance?._ui; } }
-    public static WebManager Web { get { return Instance?._web; } }
+    
     #endregion
 
     #region Language
